@@ -2,7 +2,7 @@ package com.experis.humansvszombies.models;
 import javax.persistence.*;
 
 @Entity
-public class User {
+public class AppUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
