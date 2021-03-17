@@ -5,8 +5,11 @@ import com.experis.humansvszombies.services.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+/*
+ * Rest controller for user object api requests.
+ * Calls the AppUserService class to handle the business logic.
+ */
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -19,7 +22,6 @@ public class AppUserController {
     public ResponseEntity<List<AppUser>> getUsers(){
         return appUserService.getUsers();
     }
-
     @GetMapping("/{id}")
     public ResponseEntity<AppUser> getUserById(@PathVariable long id){
         return appUserService.getUserById(id);
@@ -33,7 +35,6 @@ public class AppUserController {
         return appUserService.addUser(user);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<AppUser> updateUser(@PathVariable long id, @RequestBody AppUser user){
-        return appUserService.updatedUser(id, user);
+    public ResponseEntity<AppUser> updateUser(@PathVariable long id, @RequestBody AppUser user){ return appUserService.updatedUser(id, user);
     }
 }
