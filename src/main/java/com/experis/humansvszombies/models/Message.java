@@ -19,6 +19,26 @@ public class Message {
     @JoinColumn(name = "chat_id")
     private Chat chat;
 
+    @ManyToOne
+    @JoinColumn(name = "player_id")
+    private Player player;
+
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
     public long getId() {
         return id;
     }

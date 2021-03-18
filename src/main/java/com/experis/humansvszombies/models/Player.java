@@ -3,6 +3,8 @@ package com.experis.humansvszombies.models;
 import javax.persistence.*;
 import org.apache.commons.lang3.RandomStringUtils;
 
+import java.util.List;
+
 @Entity
 public class Player {
 
@@ -18,6 +20,10 @@ public class Player {
 
     @Column(name = "bite_code", unique = true)
     private String biteCode;
+
+    @OneToMany
+    @JoinColumn(name = "chat_id")
+    private List<Message> messages;
 
     public Player() {
         // players are humans unless otherwise specified
@@ -39,5 +45,45 @@ public class Player {
     private String createBiteCode() {
         // TODO confirm uniqueness
         return RandomStringUtils.randomNumeric(8);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public boolean isHuman() {
+        return isHuman;
+    }
+
+    public void setHuman(boolean human) {
+        isHuman = human;
+    }
+
+    public boolean isPatientZero() {
+        return isPatientZero;
+    }
+
+    public void setPatientZero(boolean patientZero) {
+        isPatientZero = patientZero;
+    }
+
+    public String getBiteCode() {
+        return biteCode;
+    }
+
+    public void setBiteCode(String biteCode) {
+        this.biteCode = biteCode;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
     }
 }
