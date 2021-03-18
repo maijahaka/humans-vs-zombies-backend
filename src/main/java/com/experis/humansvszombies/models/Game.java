@@ -15,6 +15,18 @@ public class Game {
     @Column(name = "game_state")
     private GameState gameState;
 
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
+    }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "chat_id")
+    private Chat chat;
+
     public long getId() {
         return id;
     }

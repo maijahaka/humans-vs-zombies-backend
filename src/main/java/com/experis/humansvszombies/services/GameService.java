@@ -2,7 +2,9 @@ package com.experis.humansvszombies.services;
 
 import com.experis.humansvszombies.models.Game;
 import com.experis.humansvszombies.models.GameState;
+import com.experis.humansvszombies.models.Message;
 import com.experis.humansvszombies.repositories.GameRepository;
+import com.experis.humansvszombies.repositories.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,9 @@ public class GameService {
 
     @Autowired
     private GameRepository gameRepository;
+    @Autowired
+    private MessageRepository messageRepository;
+
 
     //Returns all games from the database
     public ResponseEntity<List<Game>> getAllGames() {
@@ -64,5 +69,18 @@ public class GameService {
             status = HttpStatus.NOT_FOUND;
         }
         return new ResponseEntity<>(null, status);
+    }
+
+    public ResponseEntity<List<Message>> getMessages(@PathVariable long id){
+            if (gameRepository.existsById(id)) {
+                Game game = gameRepository.getOne(id);
+                long chatId = game.getChat().getId();
+
+                //if player is zombie -> messageRepository.findAllByisZombieIsTrueAndChat_Id(chatId)
+                //if human -> messageRepository.findAllByisHumanIsTrueAndChat_Id(chatId)
+
+                return new ResponseEntity<>(messageRepository.findAllByChat_Id(chatId), HttpStatus.OK);
+            }else
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 }

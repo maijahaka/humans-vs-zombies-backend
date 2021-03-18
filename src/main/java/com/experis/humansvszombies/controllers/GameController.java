@@ -1,6 +1,7 @@
 package com.experis.humansvszombies.controllers;
 
 import com.experis.humansvszombies.models.Game;
+import com.experis.humansvszombies.models.Message;
 import com.experis.humansvszombies.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,5 +39,9 @@ public class GameController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Game> deleteGame(@PathVariable Long id) {
         return gameService.deleteGame(id);
+    }
+    @GetMapping("/{id}/chat")
+    public ResponseEntity<List<Message>> getMessages(@PathVariable Long id) {
+        return gameService.getMessages(id);
     }
 }
