@@ -1,9 +1,8 @@
 package com.experis.humansvszombies.controllers;
 
 import com.experis.humansvszombies.models.Game;
-import com.experis.humansvszombies.repositories.GameRepository;
+import com.experis.humansvszombies.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,55 +13,30 @@ import java.util.List;
 public class GameController {
 
     @Autowired
-    private GameRepository gameRepository;
+    private GameService gameService;
 
     @GetMapping()
     public ResponseEntity<List<Game>> getAllGames() {
-        List<Game> games = gameRepository.findAll();
-        HttpStatus status = HttpStatus.OK;
-        return new ResponseEntity<>(games, status);
+        return gameService.getAllGames();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Game> getGame(@PathVariable Long id) {
-        HttpStatus status;
-        if(!gameRepository.existsById(id)) {
-            status = HttpStatus.NOT_FOUND;
-            return new ResponseEntity<>(null, status);
-        }
-        status = HttpStatus.OK;
-        Game game = gameRepository.findById(id).get();
-        return new ResponseEntity<>(game, status);
+    public ResponseEntity<Game> getGameById(@PathVariable Long id) {
+        return gameService.getGameById(id);
     }
 
     @PostMapping()
     public ResponseEntity<Game> addGame(@RequestBody Game game) {
-        Game returnGame = gameRepository.save(game);
-        HttpStatus status = HttpStatus.CREATED;
-        return new ResponseEntity<>(returnGame, status);
+        return gameService.addGame(game);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Game> updateGame(@PathVariable Long id, @RequestBody Game game) {
-        HttpStatus status;
-        if(!id.equals(game.getId())) {
-            status = HttpStatus.BAD_REQUEST;
-            return new ResponseEntity<>(null, status);
-        }
-        Game returnGame = gameRepository.save(game);
-        status = HttpStatus.NO_CONTENT;
-        return new ResponseEntity<>(returnGame, status);
+        return gameService.updateGame(id, game);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Game> deleteGame(@PathVariable Long id) {
-        HttpStatus status;
-        if(gameRepository.existsById(id)) {
-            status = HttpStatus.OK;
-            gameRepository.deleteById(id);
-        } else {
-            status = HttpStatus.NOT_FOUND;
-        }
-        return new ResponseEntity<>(null, status);
+        return gameService.deleteGame(id);
     }
 }
