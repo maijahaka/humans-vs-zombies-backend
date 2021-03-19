@@ -2,6 +2,7 @@ package com.experis.humansvszombies.services;
 
 import com.experis.humansvszombies.models.Player;
 import com.experis.humansvszombies.repositories.PlayerRepository;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +23,18 @@ public class PlayerService {
             return null;
         }
 
-        return getPlayerById(id);
+        return playerRepository.findById(id).get();
     }
 
     public Player addPlayer(Player player) {
+        if (!player.isPatientZero()) {
+            player.setHuman(true);
+        } else {
+            player.setHuman(false);
+        }
+
+        player.setBiteCode(createBiteCode());
+
         return playerRepository.save(player);
     }
 
@@ -44,5 +53,10 @@ public class PlayerService {
 
         playerRepository.deleteById(id);
         return true;
+    }
+
+    private String createBiteCode() {
+        // TODO confirm uniqueness
+        return RandomStringUtils.randomNumeric(6);
     }
 }
