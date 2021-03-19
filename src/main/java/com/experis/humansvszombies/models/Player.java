@@ -20,6 +20,14 @@ public class Player {
     @Column(name = "bite_code", unique = true)
     private String biteCode;
 
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private AppUser user;
+
+    @ManyToOne
+    @JoinColumn(name="game_id")
+    private Game game;
+
     @OneToMany(mappedBy = "player")
     private List<Message> messages;
 
@@ -53,6 +61,22 @@ public class Player {
 
     public void setBiteCode(String biteCode) {
         this.biteCode = biteCode;
+    }
+
+    public AppUser getUser() {
+        return user;
+    }
+
+    public void setUser(AppUser user) {
+        this.user = user;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     public List<Message> getMessages() {
