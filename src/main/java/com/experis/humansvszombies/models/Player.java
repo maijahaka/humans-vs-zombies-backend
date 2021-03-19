@@ -1,7 +1,6 @@
 package com.experis.humansvszombies.models;
 
 import javax.persistence.*;
-import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.List;
 
@@ -23,28 +22,6 @@ public class Player {
 
     @OneToMany(mappedBy = "player")
     private List<Message> messages;
-
-    public Player() {
-        // players are humans unless otherwise specified
-        this(false);
-    }
-
-    public Player(boolean isPatientZero) {
-        this.isPatientZero = isPatientZero;
-
-        // all players except "patient ones" are humans at first
-        if (isPatientZero) {
-            this.isHuman = false;
-        } else {
-            this.isHuman = true;
-            this.biteCode = createBiteCode();
-        }
-    }
-
-    private String createBiteCode() {
-        // TODO confirm uniqueness
-        return RandomStringUtils.randomNumeric(8);
-    }
 
     public long getId() {
         return id;
