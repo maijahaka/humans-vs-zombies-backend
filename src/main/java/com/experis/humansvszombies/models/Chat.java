@@ -15,8 +15,7 @@ public class Chat {
     @OneToOne(mappedBy = "chat")
     private Game game;
 
-    @OneToMany
-    @JoinColumn(name = "chat_id")
+    @OneToMany(mappedBy= "chat")
     private List<Message> messages;
 
     public long getId() {

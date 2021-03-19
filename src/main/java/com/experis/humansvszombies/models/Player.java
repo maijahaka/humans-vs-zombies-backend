@@ -21,8 +21,7 @@ public class Player {
     @Column(name = "bite_code", unique = true)
     private String biteCode;
 
-    @OneToMany
-    @JoinColumn(name = "chat_id")
+    @OneToMany(mappedBy = "player")
     private List<Message> messages;
 
     public Player() {
