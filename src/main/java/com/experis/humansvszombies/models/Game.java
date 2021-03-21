@@ -1,5 +1,6 @@
 package com.experis.humansvszombies.models;
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Game {
@@ -15,13 +16,8 @@ public class Game {
     @Column(name = "game_state")
     private GameState gameState;
 
-    public Chat getChat() {
-        return chat;
-    }
-
-    public void setChat(Chat chat) {
-        this.chat = chat;
-    }
+    @OneToMany(mappedBy = "game")
+    List<Player> players;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "chat_id")
@@ -49,5 +45,21 @@ public class Game {
 
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
+    }
+
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
     }
 }

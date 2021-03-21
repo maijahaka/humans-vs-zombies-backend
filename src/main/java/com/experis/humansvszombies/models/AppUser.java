@@ -1,5 +1,6 @@
 package com.experis.humansvszombies.models;
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class AppUser {
@@ -11,6 +12,9 @@ public class AppUser {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
+
+    @OneToMany(mappedBy = "user")
+    private List<Player> players;
 
     public long getId() {
         return this.id;
@@ -34,5 +38,13 @@ public class AppUser {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
     }
 }
