@@ -1,6 +1,6 @@
 package com.experis.humansvszombies.models;
-import com.fasterxml.jackson.annotation.JsonGetter;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import javax.persistence.*;
 import java.util.List;
 import java.util.stream.Collectors;
