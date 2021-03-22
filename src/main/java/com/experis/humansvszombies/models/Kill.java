@@ -79,6 +79,13 @@ public class Kill {
         this.killer = killer;
     }
 
+    public Player getVictim() {
+        return victim;
+    }
+
+    public void setVictim(Player victim) {
+        this.victim = victim;
+    }
 
 
     //public Date getDate() {
