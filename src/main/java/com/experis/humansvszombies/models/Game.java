@@ -19,6 +19,9 @@ public class Game {
     @OneToMany(mappedBy = "game")
     List<Player> players;
 
+    @OneToMany(mappedBy = "game")
+    List<Kill> kills;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "chat_id")
     private Chat chat;
@@ -61,5 +64,13 @@ public class Game {
 
     public void setPlayers(List<Player> players) {
         this.players = players;
+    }
+
+    public List<Kill> getKills() {
+        return kills;
+    }
+
+    public void setKills(List<Kill> kills) {
+        this.kills = kills;
     }
 }

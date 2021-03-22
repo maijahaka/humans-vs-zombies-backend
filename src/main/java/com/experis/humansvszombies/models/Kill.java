@@ -1,7 +1,7 @@
 package com.experis.humansvszombies.models;
 
 import javax.persistence.*;
-import java.util.Date;
+
 
 @Entity
 public class Kill {
@@ -17,6 +17,19 @@ public class Kill {
     private float lng;
     //@Column(name ="time_of_death")
     //private Date date;
+
+    @OneToOne
+    @JoinColumn(name="killer_id")
+    private Player killer;
+
+    @ManyToOne
+    @JoinColumn(name="game_id")
+    private Game game;
+
+    @ManyToOne
+    @JoinColumn(name="victim_id")
+    private Player victim;
+
 
     public long getId() {
         return id;
@@ -49,6 +62,24 @@ public class Kill {
     public void setLng(float lng) {
         this.lng = lng;
     }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public Player getKiller() {
+        return killer;
+    }
+
+    public void setKiller(Player killer) {
+        this.killer = killer;
+    }
+
+
 
     //public Date getDate() {
     //    return date;

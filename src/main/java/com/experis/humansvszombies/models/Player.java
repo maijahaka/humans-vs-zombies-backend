@@ -31,6 +31,12 @@ public class Player {
     @OneToMany(mappedBy = "player")
     private List<Message> messages;
 
+    @OneToMany(mappedBy = "victim")
+    private List<Kill> victims;
+
+    @OneToOne(mappedBy = "killer")
+    private Kill killer;
+
     public long getId() {
         return id;
     }
@@ -85,5 +91,21 @@ public class Player {
 
     public void setMessages(List<Message> messages) {
         this.messages = messages;
+    }
+
+    public List<Kill> getVictims() {
+        return victims;
+    }
+
+    public void setVictims(List<Kill> victims) {
+        this.victims = victims;
+    }
+
+    public Kill getKiller() {
+        return killer;
+    }
+
+    public void setKiller(Kill killer) {
+        this.killer = killer;
     }
 }
