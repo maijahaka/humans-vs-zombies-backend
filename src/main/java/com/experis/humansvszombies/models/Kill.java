@@ -1,6 +1,12 @@
 package com.experis.humansvszombies.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Entity
@@ -30,6 +36,26 @@ public class Kill {
     @JoinColumn(name="victim_id")
     private Player victim;
 
+    @JsonGetter("game")
+    public String game(){
+        if (game != null)
+            return "/api/v1/games/" + game.getId();
+        return null;
+    }
+
+    @JsonGetter("killer")
+    public String killer(){
+        if (killer != null)
+            return "/api/v1/players/" + killer.getId();
+        return null;
+    }
+
+    @JsonGetter("victim")
+    public String victim(){
+        if (victim != null)
+            return "/api/v1/players/" + victim.getId();
+        return null;
+    }
 
     public long getId() {
         return id;

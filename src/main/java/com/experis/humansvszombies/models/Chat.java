@@ -1,5 +1,4 @@
 package com.experis.humansvszombies.models;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 
 import javax.persistence.*;
@@ -32,5 +31,27 @@ public class Chat {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    @JsonGetter("messages")
+    public List<String> messagesGetter() {
+        return messages.stream()
+                .map(message -> "/placeholder/" + message.getId())
+                .collect(Collectors.toList());
+    }
+
+    @JsonGetter("game")
+    public String game(){
+        if (game != null)
+            return "api/v1/games/" + game.getId();
+        return null;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
     }
 }

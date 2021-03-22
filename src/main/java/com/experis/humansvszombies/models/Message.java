@@ -1,6 +1,11 @@
 package com.experis.humansvszombies.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonGetter;
+
 import javax.persistence.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class Message {
@@ -22,6 +27,21 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "player_id")
     private Player player;
+
+    @JsonGetter("chat")
+    public String chat(){
+        if (chat != null)
+            return "/api/v1/games/" + chat.getId();
+        return null;
+    }
+
+    @JsonGetter("player")
+    public String player(){
+        if (player != null)
+            return "/api/v1/players/" + player.getId();
+        return null;
+    }
+
 
     public Chat getChat() {
         return chat;
