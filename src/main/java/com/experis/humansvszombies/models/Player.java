@@ -32,11 +32,11 @@ public class Player {
     @OneToMany(mappedBy = "player")
     private List<Message> messages;
 
-    @OneToMany(mappedBy = "victim")
-    private List<Kill> victims;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "killer")
+    private List<Kill> kills;
 
-    @OneToOne(mappedBy = "killer")
-    private Kill killer;
+    @OneToOne(mappedBy ="victim")
+    private Kill victimOf;
 
     @JsonGetter("messages")
     public List<String> messagesGetter() {
@@ -45,24 +45,24 @@ public class Player {
                 .collect(Collectors.toList());
     }
 
-    @JsonGetter("victims")
+    @JsonGetter("kills")
     public List<String> victimsGetter() {
-        return victims.stream()
-                .map(victim -> "/api/v1/players/" + victim.getId())
+        return this.kills.stream()
+                .map(kill -> "/api/v1/players/" + kill.getVictim().getId())
                 .collect(Collectors.toList());
+    }
+
+    @JsonGetter("victimOf")
+    public String victimOf(){
+        if (this.victimOf != null)
+            return "/api/v1/players/" + this.victimOf.getKiller().getId();
+        return null;
     }
 
     @JsonGetter("game")
     public String game(){
         if (game != null)
             return "/api/v1/games/" + game.getId();
-        return null;
-    }
-
-    @JsonGetter("killer")
-    public String killer(){
-        if (killer != null)
-            return "/api/v1/users/" + killer.getId();
         return null;
     }
 
@@ -122,19 +122,19 @@ public class Player {
         this.messages = messages;
     }
 
-    public List<Kill> getVictims() {
-        return victims;
+    public List<Kill> getKills() {
+        return kills;
     }
 
-    public void setVictims(List<Kill> victims) {
-        this.victims = victims;
+    public void setKills(List<Kill> kills) {
+        this.kills = kills;
     }
 
-    public Kill getKiller() {
-        return killer;
+    public Kill getVictimOf() {
+        return victimOf;
     }
 
-    public void setKiller(Kill killer) {
-        this.killer = killer;
+    public void setVictimOf(Kill victimOf) {
+        this.victimOf = victimOf;
     }
 }

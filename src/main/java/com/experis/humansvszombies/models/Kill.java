@@ -19,16 +19,16 @@ public class Kill {
     //private Date date;
 
     @OneToOne
-    @JoinColumn(name="killer_id")
-    private Player killer;
+    @JoinColumn(name="victim_id")
+    private Player victim;
 
     @ManyToOne
     @JoinColumn(name="game_id")
     private Game game;
 
     @ManyToOne
-    @JoinColumn(name="victim_id")
-    private Player victim;
+    @JoinColumn(name="killer_id")
+    private Player killer;
 
     @JsonGetter("game")
     public String game(){
@@ -37,17 +37,16 @@ public class Kill {
         return null;
     }
 
-    @JsonGetter("killer")
-    public String killer(){
-        if (killer != null)
-            return "/api/v1/players/" + killer.getId();
+    @JsonGetter
+    public String victim(){
+        if (this.victim != null)
+            return "/api/v1/players/" + victim.getId();
         return null;
     }
-
-    @JsonGetter("victim")
-    public String victim(){
-        if (victim != null)
-            return "/api/v1/players/" + victim.getId();
+    @JsonGetter
+    public String killer(){
+        if (this.killer != null)
+            return "/api/v1/players/" + killer.getId();
         return null;
     }
 
@@ -83,6 +82,14 @@ public class Kill {
         this.lng = lng;
     }
 
+    public Player getVictim() {
+        return victim;
+    }
+
+    public void setVictim(Player victim) {
+        this.victim = victim;
+    }
+
     public Game getGame() {
         return game;
     }
@@ -98,21 +105,4 @@ public class Kill {
     public void setKiller(Player killer) {
         this.killer = killer;
     }
-
-    public Player getVictim() {
-        return victim;
-    }
-
-    public void setVictim(Player victim) {
-        this.victim = victim;
-    }
-
-
-    //public Date getDate() {
-    //    return date;
-    //}
-
-    //public void setDate(Date date) {
-    //    this.date = date;
-    //}
 }

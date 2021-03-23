@@ -1,7 +1,7 @@
 package com.experis.humansvszombies.controllers;
 
 import com.experis.humansvszombies.models.Kill;
-import com.experis.humansvszombies.models.Player;
+import com.experis.humansvszombies.models.wrappers.BiteCodeKillerWrapper;
 import com.experis.humansvszombies.services.KillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,5 +28,11 @@ public class KillController {
         Kill kill = killService.getKill(killId);
         HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(kill, status);
+    }
+    @PostMapping
+    public ResponseEntity<Kill> addKill(@RequestBody BiteCodeKillerWrapper kill, @PathVariable long gameId){
+        Kill addedKill = killService.addKill(kill, gameId);
+        HttpStatus status = HttpStatus.OK;
+        return new ResponseEntity<>(addedKill, status);
     }
 }
