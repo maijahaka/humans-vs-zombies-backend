@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -31,13 +32,11 @@ public class GameService {
 
 
     public Game getGameById(long id) {
-        //If id doesn't exists return null
-        if(!gameRepository.existsById(id)) {
-            return null;
-        }
-        //If id exists return the game
-        Game game = gameRepository.findById(id).get();
-        return game;
+        //If id doesn't exists throw EntityNotFoundException
+        if(!gameRepository.existsById(id))
+            throw new EntityNotFoundException("Game ID not found");
+        //else return the game
+        return gameRepository.findById(id).get();
     }
 
     //Sets starting game state for the game and checks if a name of the game is valid
