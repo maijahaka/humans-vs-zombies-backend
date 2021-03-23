@@ -4,6 +4,7 @@ import com.experis.humansvszombies.models.Game;
 import com.experis.humansvszombies.models.Message;
 import com.experis.humansvszombies.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,30 +20,48 @@ public class GameController {
 
     @GetMapping()
     public ResponseEntity<List<Game>> getAllGames() {
-        return gameService.getAllGames();
+        List<Game> gameList = gameService.getAllGames();
+        return new ResponseEntity<>(gameList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Game> getGameById(@PathVariable Long id) {
-        return gameService.getGameById(id);
+    public ResponseEntity<Game> getGameById(@PathVariable long id) {
+        Game game = gameService.getGameById(id);
+        if (game != null)
+            return new ResponseEntity<>(game, HttpStatus.OK);
+        else
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     @PostMapping()
     public ResponseEntity<Game> addGame(@RequestBody Game game) {
-        return gameService.addGame(game);
+        Game addedGame = gameService.addGame(game);
+        if (addedGame != null)
+            return new ResponseEntity<>(addedGame, HttpStatus.OK);
+        else
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Game> updateGame(@PathVariable Long id, @RequestBody Game game) {
-        return gameService.updateGame(id, game);
+        Game updatedGame = gameService.updateGame(id, game);
+        if (updatedGame != null)
+            return new ResponseEntity<>(updatedGame, HttpStatus.OK);
+        else
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Game> deleteGame(@PathVariable Long id) {
-        return gameService.deleteGame(id);
+    public ResponseEntity deleteGame(@PathVariable Long id) {
+        boolean deleted  = gameService.deleteGame(id);
+        if (deleted)
+            return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
     @GetMapping("/{id}/chat")
     public ResponseEntity<List<Message>> getMessages(@PathVariable Long id) {
-        return gameService.getMessages(id);
+        List<Message> messageList = gameService.getMessages(id);
+        return new ResponseEntity<>(messageList, HttpStatus.OK);
     }
 }

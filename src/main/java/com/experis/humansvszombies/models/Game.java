@@ -19,10 +19,10 @@ public class Game {
     @Column(name = "game_state")
     private GameState gameState;
 
-    @OneToMany(mappedBy = "game")
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     List<Player> players;
 
-    @OneToMany(mappedBy = "game")
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     List<Kill> kills;
 
     @OneToOne(cascade = CascadeType.ALL)

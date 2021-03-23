@@ -24,63 +24,55 @@ public class GameService {
 
 
     //Returns all games from the database
-    public ResponseEntity<List<Game>> getAllGames() {
+    public List<Game> getAllGames() {
         List<Game> games = gameRepository.findAll();
-        return new ResponseEntity<>(games, HttpStatus.OK);
+        return games;
     }
 
-    //Checks if the game id is in the database and returns a response depending on that
-    public ResponseEntity<Game> getGameById(@PathVariable Long id) {
-        //If id doesn't exists, returns null and Http status 404
+
+    public Game getGameById(long id) {
+        //If id doesn't exists return null
         if(!gameRepository.existsById(id)) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return null;
         }
-        //If id exists, returns game by id and Http status 200
+        //If id exists return the game
         Game game = gameRepository.findById(id).get();
-        return new ResponseEntity<>(game, HttpStatus.OK);
+        return game;
     }
 
     //Sets starting game state for the game and checks if a name of the game is valid
-    public ResponseEntity<Game> addGame(@RequestBody Game game) {
+    public Game addGame(Game game) {
         game.setGameState(GameState.REGISTRATION);
         if(game.getName() == null) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return null;
         }
-        Game returnGame = gameRepository.save(game); //Adds the new game to the database
-        return new ResponseEntity<>(returnGame, HttpStatus.CREATED);
+        return gameRepository.save(game); //Adds the new game to the database
     }
 
     //Updates the game data to the database if path id matches to the game id in request body
-    public ResponseEntity<Game> updateGame(@PathVariable Long id, @RequestBody Game game) {
-        if(!id.equals(game.getId())) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
-        Game returnGame = gameRepository.save(game);
-        return new ResponseEntity<>(returnGame, HttpStatus.OK);
+    public Game updateGame(long id, Game game) {
+        if(id != game.getId())
+            return null;
+        return gameRepository.save(game);
     }
 
     //Deletes the game by id if the id exists in the database
-    public ResponseEntity<Game> deleteGame(@PathVariable Long id) {
-        HttpStatus status;
+    public boolean deleteGame(long id) {
         if(gameRepository.existsById(id)) {
-            status = HttpStatus.OK;
             gameRepository.deleteById(id);
-        } else {
-            status = HttpStatus.NOT_FOUND;
-        }
-        return new ResponseEntity<>(null, status);
+            return true;
+        }else
+            return false;
     }
 
-    public ResponseEntity<List<Message>> getMessages(@PathVariable long id){
+    public List<Message> getMessages(long id){
             if (gameRepository.existsById(id)) {
                 Game game = gameRepository.getOne(id);
                 long chatId = game.getChat().getId();
-
                 //if player is zombie -> messageRepository.findAllByisZombieIsTrueAndChat_Id(chatId)
                 //if human -> messageRepository.findAllByisHumanIsTrueAndChat_Id(chatId)
-
-                return new ResponseEntity<>(messageRepository.findAllByChat_Id(chatId), HttpStatus.OK);
+                return messageRepository.findAllByChat_Id(chatId);
             }else
-                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+                return null;
     }
 }
