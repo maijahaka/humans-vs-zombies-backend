@@ -37,13 +37,13 @@ public class GameController {
     public ResponseEntity<Game> addGame(@RequestBody Game game) {
         Game addedGame = gameService.addGame(game);
         if (addedGame != null)
-            return new ResponseEntity<>(addedGame, HttpStatus.OK);
+            return new ResponseEntity<>(addedGame, HttpStatus.CREATED);
         else
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Game> updateGame(@PathVariable Long id, @RequestBody Game game) {
+    public ResponseEntity<Game> updateGame(@PathVariable long id, @RequestBody Game game) {
         Game updatedGame = gameService.updateGame(id, game);
         if (updatedGame != null)
             return new ResponseEntity<>(updatedGame, HttpStatus.OK);
@@ -52,7 +52,7 @@ public class GameController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteGame(@PathVariable Long id) {
+    public ResponseEntity deleteGame(@PathVariable long id) {
         boolean deleted  = gameService.deleteGame(id);
         if (deleted)
             return new ResponseEntity<>(HttpStatus.OK);
@@ -60,7 +60,7 @@ public class GameController {
     }
 
     @GetMapping("/{id}/chat")
-    public ResponseEntity<List<Message>> getMessages(@PathVariable Long id) {
+    public ResponseEntity<List<Message>> getMessages(@PathVariable long id) {
         List<Message> messageList = gameService.getMessages(id);
         return new ResponseEntity<>(messageList, HttpStatus.OK);
     }
