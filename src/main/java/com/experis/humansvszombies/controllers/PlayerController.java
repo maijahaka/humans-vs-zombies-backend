@@ -11,22 +11,22 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/api/v1/players")
+@RequestMapping("/api/v1/games/{gameId}/players")
 public class PlayerController {
 
     @Autowired
     PlayerService playerService;
 
     @GetMapping
-    public ResponseEntity<List<Player>> getAllPlayers() {
-        List<Player> players = playerService.getAllPlayers();
+    public ResponseEntity<List<Player>> getAllPlayers(@PathVariable Long gameId) {
+        List<Player> players = playerService.getAllPlayers(gameId);
         HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(players, status);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Player> getPlayerById(@PathVariable Long id) {
-        Player returnedPlayer = playerService.getPlayerById(id);
+    @GetMapping("/{playerId}")
+    public ResponseEntity<Player> getPlayerById(@PathVariable Long gameId, @PathVariable Long playerId) {
+        Player returnedPlayer = playerService.getPlayerById(gameId, playerId);
         HttpStatus status;
 
         if (returnedPlayer != null) {
@@ -39,22 +39,22 @@ public class PlayerController {
     }
 
     @PostMapping
-    public  ResponseEntity<Player> addPlayer(@RequestBody Player player) {
+    public  ResponseEntity<Player> addPlayer(@PathVariable Long gameId, @RequestBody Player player) {
         HttpStatus status = HttpStatus.CREATED;
-        Player addedPlayer = playerService.addPlayer(player);
+        Player addedPlayer = playerService.addPlayer(gameId, player);
         return new ResponseEntity<>(addedPlayer, status);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Player> updatePlayer(@PathVariable Long id, @RequestBody Player player) {
+    @PutMapping("/{playerId}")
+    public ResponseEntity<Player> updatePlayer(@PathVariable Long gameId, @PathVariable Long playerId, @RequestBody Player player) {
         HttpStatus status;
 
-        if (!id.equals(player.getId())) {
+        if (!playerId.equals(player.getId())) {
             status = HttpStatus.BAD_REQUEST;
             return new ResponseEntity<>(status);
         }
 
-        Player updatedPlayer = playerService.updatePlayer(id, player);
+        Player updatedPlayer = playerService.updatePlayer(gameId, playerId, player);
 
         if (updatedPlayer == null) {
             status = HttpStatus.NOT_FOUND;
@@ -65,10 +65,10 @@ public class PlayerController {
         return new ResponseEntity<>(updatedPlayer, status);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePlayer(@PathVariable Long id) {
+    @DeleteMapping("/{playerId}")
+    public ResponseEntity<Void> deletePlayer(@PathVariable Long gameId, @PathVariable Long playerId) {
         HttpStatus status;
-        boolean wasDeleted = playerService.deletePlayer(id);
+        boolean wasDeleted = playerService.deletePlayer(gameId, playerId);
 
         if (wasDeleted) {
             status = HttpStatus.NO_CONTENT;
