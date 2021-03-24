@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RequestMapping("/api/v1/games")
@@ -33,10 +32,7 @@ public class GameController {
     @PostMapping()
     public ResponseEntity<Game> addGame(@RequestBody Game game) {
         Game addedGame = gameService.addGame(game);
-        if (addedGame != null)
-            return new ResponseEntity<>(addedGame, HttpStatus.CREATED);
-        else
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(addedGame, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -46,11 +42,9 @@ public class GameController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteGame(@PathVariable long id) {
-        boolean deleted  = gameService.deleteGame(id);
-        if (deleted)
-            return new ResponseEntity<>(HttpStatus.OK);
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Game> deleteGame(@PathVariable long id) {
+        Game deleted  = gameService.deleteGame(id);
+        return new ResponseEntity<>(deleted, HttpStatus.OK);
     }
 
     @GetMapping("/{id}/chat")

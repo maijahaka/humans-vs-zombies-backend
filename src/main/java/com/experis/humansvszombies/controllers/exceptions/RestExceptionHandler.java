@@ -1,24 +1,20 @@
 package com.experis.humansvszombies.controllers.exceptions;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import javax.persistence.EntityNotFoundException;
-
+import org.springframework.web.server.ResponseStatusException;
+/*
+* Exception handler for all thrown API errors. Constructs a new APIError object and returns
+* it as an response entity. APIError contains the exception message and HTTP response code of the thrown exception.
+*
+ */
 @ControllerAdvice
-public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ErrorWrapper> handleEntityNotFound(
-            EntityNotFoundException ex) {
-        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getMessage());
-        apiError.setMessage(ex.getMessage());
-        return buildResponseEntity(apiError);
-    }
-
-    private ResponseEntity<ErrorWrapper> buildResponseEntity(ApiError apiError) {
-        ErrorWrapper errorWrapper = new ErrorWrapper(apiError);
-        return new ResponseEntity<>(errorWrapper, apiError.getStatus());
+public class RestExceptionHandler{
+    //catches the ResponseStatusExceptions thrown by services
+    @ExceptionHandler
+    public ResponseEntity<Object> handleResponseStatusException(ResponseStatusException ex) {
+        ApiError apiError = new ApiError(ex.getStatus(), ex.getReason());
+        return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 }
