@@ -24,8 +24,8 @@ public class PlayerService {
         return playerRepository.findByUserIdAndGame_Id(userId, gameId);
     }
 
-    public List<Player> getAllPlayers() {
-        return playerRepository.findAll();
+    public List<Player> getAllPlayers(long gameId) {
+        return playerRepository.findAllByGame_Id(gameId);
     }
 
     public Player getPlayerById(Long gameId, String userId) {
@@ -42,14 +42,17 @@ public class PlayerService {
         return player;
     }
 
-    public Player addPlayer(Long gameId, Player player) {
+    public Player addPlayer(Long gameId, Player player, String userId) {
+        if (playerRepository.findByUserIdAndGame_Id(userId, gameId) != null){
+            return null;
+        }
         if (!player.isPatientZero()) {
             player.setHuman(true);
         } else {
             player.setHuman(false);
         }
         player.setBiteCode(createBiteCode());
-
+        player.setUserId(userId);
         Game game = gameRepository.findById(gameId).get();
         player.setGame(game);
         player.setMessages(new ArrayList<>());

@@ -20,8 +20,8 @@ public class PlayerController {
     PlayerService playerService;
 
     @GetMapping
-    public ResponseEntity<List<Player>> getAllPlayers(@PathVariable Long gameId) {
-        List<Player> players = playerService.getAllPlayers();
+    public ResponseEntity<List<Player>> getAllPlayers(@PathVariable long gameId) {
+        List<Player> players = playerService.getAllPlayers(gameId);
         HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(players, status);
     }
@@ -50,8 +50,11 @@ public class PlayerController {
 
     @PostMapping
     public  ResponseEntity<Player> addPlayer(@PathVariable Long gameId, @RequestBody Player player) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userId = auth.getPrincipal().toString();
+        System.out.println(userId);
+        Player addedPlayer = playerService.addPlayer(gameId, player, userId);
         HttpStatus status = HttpStatus.CREATED;
-        Player addedPlayer = playerService.addPlayer(gameId, player);
         return new ResponseEntity<>(addedPlayer, status);
     }
 
