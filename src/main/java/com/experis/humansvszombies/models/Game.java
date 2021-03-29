@@ -2,6 +2,7 @@ package com.experis.humansvszombies.models;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,18 @@ public class Game {
     @Enumerated(EnumType.STRING)
     @Column(name = "game_state")
     private GameState gameState;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "rules")
+    private  String rules;
+
+    @Column(name = "latitude")
+    private Float latitude;
+
+    @Column(name= "longitude")
+    private Float longitude;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     List<Player> players;
@@ -72,6 +85,38 @@ public class Game {
 
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getRules() {
+        return rules;
+    }
+
+    public void setRules(String rules) {
+        this.rules = rules;
+    }
+
+    public Float getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Float latitude) {
+        this.latitude = latitude;
+    }
+
+    public Float getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Float longitude) {
+        this.longitude = longitude;
     }
 
     public Chat getChat() {
