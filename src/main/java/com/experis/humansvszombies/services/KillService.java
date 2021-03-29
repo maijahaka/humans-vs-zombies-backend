@@ -29,7 +29,7 @@ public class KillService {
             return killRepository.findById(id).get();
         return null;
     }
-    public Kill addKill(BiteCodeKillerWrapper biteCodeKillWrapper, long gameId) {
+   /* public Kill addKill(BiteCodeKillerWrapper biteCodeKillWrapper, long gameId) {
         Player victim = playerRepository.findPlayerByBiteCode(biteCodeKillWrapper.getBiteCode());
         System.out.println(biteCodeKillWrapper.getKillerId());
         long killerId = biteCodeKillWrapper.getKillerId();
@@ -49,5 +49,5 @@ public class KillService {
         kill.setGame(gameRepository.findById(gameId).get());
         kill = killRepository.save(kill);
         return kill;
-    }
+    }*/
 }

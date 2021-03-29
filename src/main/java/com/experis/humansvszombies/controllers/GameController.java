@@ -17,6 +17,7 @@ public class GameController {
     @Autowired
     private GameService gameService;
 
+
     @GetMapping()
     public ResponseEntity<List<Game>> getAllGames() {
         List<Game> gameList = gameService.getAllGames();

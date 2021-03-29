@@ -20,16 +20,20 @@ public class PlayerService {
     @Autowired
     GameRepository gameRepository;
 
-    public List<Player> getAllPlayers(Long gameId) {
-        return playerRepository.findAllByGame_Id(gameId);
+    public Player getLoggedInPlayer(String playerId, long gameId){
+        return playerRepository.findByPlayerIdAndGame_Id(playerId, gameId);
     }
 
-    public Player getPlayerById(Long gameId, Long playerId) {
-        if (!playerRepository.existsById(playerId)) {
+    public List<Player> getAllPlayers() {
+        return playerRepository.findAll();
+    }
+
+    public Player getPlayerById(Long gameId, String playerId) {
+        if (playerRepository.findByPlayerIdAndGame_Id(playerId, gameId) == null) {
             return null;
         }
 
-        Player player = playerRepository.findById(playerId).get();
+        Player player = playerRepository.findByPlayerIdAndGame_Id(playerId, gameId);
 
         if (player.getGame().getId() != gameId) {
             return null;
@@ -44,19 +48,17 @@ public class PlayerService {
         } else {
             player.setHuman(false);
         }
-
         player.setBiteCode(createBiteCode());
 
-        Game game = gameRepository.getOne(gameId);
+        Game game = gameRepository.findById(gameId).get();
         player.setGame(game);
-
         player.setMessages(new ArrayList<>());
         player.setKills(new ArrayList<>());
 
         return playerRepository.save(player);
     }
 
-    public Player updatePlayer(Long gameId, Long playerId, Player player) {
+    public Player updatePlayer(Long gameId, String playerId, Player player) {
         if (!playerRepository.existsById(playerId)) {
             return null;
         }
@@ -68,7 +70,7 @@ public class PlayerService {
         return playerRepository.save(player);
     }
 
-    public boolean deletePlayer(Long gameId, Long playerId) {
+    public boolean deletePlayer(Long gameId, String playerId) {
         if (!playerRepository.existsById(playerId)) {
             return false;
         }

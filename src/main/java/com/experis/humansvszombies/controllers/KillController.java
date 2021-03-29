@@ -29,10 +29,10 @@ public class KillController {
         HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(kill, status);
     }
-    @PostMapping
+   /* @PostMapping
     public ResponseEntity<Kill> addKill(@RequestBody BiteCodeKillerWrapper kill, @PathVariable long gameId){
         Kill addedKill = killService.addKill(kill, gameId);
         HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(addedKill, status);
-    }
+    }*/
 }

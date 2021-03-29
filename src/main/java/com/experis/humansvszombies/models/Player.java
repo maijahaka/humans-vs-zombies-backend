@@ -12,6 +12,9 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(name = "player_id")
+    private String playerId;
+
     @Column(name = "is_human")
     private boolean isHuman;
 
@@ -21,9 +24,9 @@ public class Player {
     @Column(name = "bite_code", unique = true)
     private String biteCode;
 
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private AppUser user;
+   //@ManyToOne
+    //@JoinColumn(name="user_id")
+    //private AppUser user;
 
     @ManyToOne
     @JoinColumn(name="game_id")
@@ -74,6 +77,14 @@ public class Player {
         this.id = id;
     }
 
+    public String getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(String playerId) {
+        this.playerId = playerId;
+    }
+
     public boolean isHuman() {
         return isHuman;
     }
@@ -98,13 +109,9 @@ public class Player {
         this.biteCode = biteCode;
     }
 
-    public AppUser getUser() {
-        return user;
-    }
+    //public AppUser getUser() {   return user;   }
 
-    public void setUser(AppUser user) {
-        this.user = user;
-    }
+   // public void setUser(AppUser user) { this.user = user;  }
 
     public Game getGame() {
         return game;

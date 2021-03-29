@@ -5,6 +5,8 @@ import com.experis.humansvszombies.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,13 +21,22 @@ public class PlayerController {
 
     @GetMapping
     public ResponseEntity<List<Player>> getAllPlayers(@PathVariable Long gameId) {
-        List<Player> players = playerService.getAllPlayers(gameId);
+        List<Player> players = playerService.getAllPlayers();
         HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(players, status);
     }
 
+    @GetMapping("/currentplayer")
+    public ResponseEntity<Player> getLoggedPlayer(@PathVariable long gameId){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String playerId = auth.getPrincipal().toString();
+        System.out.println(playerId);
+        return new ResponseEntity<>(playerService.getLoggedInPlayer(playerId, gameId), HttpStatus.OK);
+
+    }
+
     @GetMapping("/{playerId}")
-    public ResponseEntity<Player> getPlayerById(@PathVariable Long gameId, @PathVariable Long playerId) {
+    public ResponseEntity<Player> getPlayerById(@PathVariable Long gameId, @PathVariable String playerId){
         Player returnedPlayer = playerService.getPlayerById(gameId, playerId);
         HttpStatus status;
 
@@ -34,7 +45,6 @@ public class PlayerController {
         } else {
             status = HttpStatus.NOT_FOUND;
         }
-
         return new ResponseEntity<>(returnedPlayer, status);
     }
 
@@ -46,7 +56,7 @@ public class PlayerController {
     }
 
     @PutMapping("/{playerId}")
-    public ResponseEntity<Player> updatePlayer(@PathVariable Long gameId, @PathVariable Long playerId, @RequestBody Player player) {
+    public ResponseEntity<Player> updatePlayer(@PathVariable Long gameId, @PathVariable String playerId, @RequestBody Player player) {
         HttpStatus status;
 
         if (!playerId.equals(player.getId())) {
@@ -66,7 +76,7 @@ public class PlayerController {
     }
 
     @DeleteMapping("/{playerId}")
-    public ResponseEntity<Void> deletePlayer(@PathVariable Long gameId, @PathVariable Long playerId) {
+    public ResponseEntity<Void> deletePlayer(@PathVariable Long gameId, @PathVariable String playerId) {
         HttpStatus status;
         boolean wasDeleted = playerService.deletePlayer(gameId, playerId);
 
