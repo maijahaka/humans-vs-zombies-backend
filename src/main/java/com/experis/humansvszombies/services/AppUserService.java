@@ -1,7 +1,9 @@
 package com.experis.humansvszombies.services;
 
 import com.experis.humansvszombies.models.AppUser;
+import com.experis.humansvszombies.models.Game;
 import com.experis.humansvszombies.repositories.AppUserRepository;
+import com.experis.humansvszombies.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,9 @@ import java.util.List;
 public class AppUserService {
     @Autowired
     AppUserRepository appUserRepository;
+
+    @Autowired
+    GameRepository gameRepository;
 
     //returns all users from user repository with Http status 200
     public ResponseEntity<List<AppUser>> getUsers() {
@@ -33,6 +38,10 @@ public class AppUserService {
         }else
             status = HttpStatus.NOT_FOUND;
         return new ResponseEntity<>(user, status);
+    }
+
+    public List<Game> getGamesByUserId(String userId) {
+        return gameRepository.findAllByUserId(userId);
     }
 
     //deletes a user with given id from the database if one can be found.
