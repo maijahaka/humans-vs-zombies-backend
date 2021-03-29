@@ -20,20 +20,20 @@ public class PlayerService {
     @Autowired
     GameRepository gameRepository;
 
-    public Player getLoggedInPlayer(String playerId, long gameId){
-        return playerRepository.findByPlayerIdAndGame_Id(playerId, gameId);
+    public Player getLoggedInPlayer(String userId, long gameId){
+        return playerRepository.findByUserIdAndGame_Id(userId, gameId);
     }
 
     public List<Player> getAllPlayers() {
         return playerRepository.findAll();
     }
 
-    public Player getPlayerById(Long gameId, String playerId) {
-        if (playerRepository.findByPlayerIdAndGame_Id(playerId, gameId) == null) {
+    public Player getPlayerById(Long gameId, String userId) {
+        if (playerRepository.findByUserIdAndGame_Id(userId, gameId) == null) {
             return null;
         }
 
-        Player player = playerRepository.findByPlayerIdAndGame_Id(playerId, gameId);
+        Player player = playerRepository.findByUserIdAndGame_Id(userId, gameId);
 
         if (player.getGame().getId() != gameId) {
             return null;

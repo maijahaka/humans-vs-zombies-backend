@@ -8,7 +8,6 @@ import java.util.List;
 
 @Repository
 public interface PlayerRepository extends JpaRepository<Player, String> {
-    List<Player> findAllByPlayerIdAndGame_Id(String playerId, Long gameId);
-    Player findPlayerByBiteCode(String biteCode);
-    Player findByPlayerIdAndGame_Id(String playerId, long gameId);
+    Player findByUserIdAndGame_Id(String userId, long gameId);
+    Player findByIdAndGame_Id(long id, long gameId);
 }

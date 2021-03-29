@@ -29,15 +29,15 @@ public class PlayerController {
     @GetMapping("/currentplayer")
     public ResponseEntity<Player> getLoggedPlayer(@PathVariable long gameId){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String playerId = auth.getPrincipal().toString();
-        System.out.println(playerId);
-        return new ResponseEntity<>(playerService.getLoggedInPlayer(playerId, gameId), HttpStatus.OK);
+        String userId = auth.getPrincipal().toString();
+        System.out.println(userId);
+        return new ResponseEntity<>(playerService.getLoggedInPlayer(userId, gameId), HttpStatus.OK);
 
     }
 
-    @GetMapping("/{playerId}")
-    public ResponseEntity<Player> getPlayerById(@PathVariable Long gameId, @PathVariable String playerId){
-        Player returnedPlayer = playerService.getPlayerById(gameId, playerId);
+    @GetMapping("/{userId}")
+    public ResponseEntity<Player> getPlayerById(@PathVariable Long gameId, @PathVariable String userId){
+        Player returnedPlayer = playerService.getPlayerById(gameId, userId);
         HttpStatus status;
 
         if (returnedPlayer != null) {

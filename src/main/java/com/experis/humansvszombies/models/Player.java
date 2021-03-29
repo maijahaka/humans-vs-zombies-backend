@@ -12,8 +12,8 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "player_id")
-    private String playerId;
+    @Column(name = "user_id")
+    private String userId;
 
     @Column(name = "is_human")
     private boolean isHuman;
@@ -77,14 +77,6 @@ public class Player {
         this.id = id;
     }
 
-    public String getPlayerId() {
-        return playerId;
-    }
-
-    public void setPlayerId(String playerId) {
-        this.playerId = playerId;
-    }
-
     public boolean isHuman() {
         return isHuman;
     }
@@ -143,5 +135,13 @@ public class Player {
 
     public void setVictimOf(Kill victimOf) {
         this.victimOf = victimOf;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
