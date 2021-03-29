@@ -3,6 +3,12 @@ package com.experis.humansvszombies.models;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import javax.persistence.*;
 
+/*
+* Entity class modelling a kill in the game.
+* Every kill has a single victim and a single killer.
+* A player can have multiple kills.
+ */
+
 @Entity
 public class Kill {
     @Id
@@ -18,14 +24,15 @@ public class Kill {
     //@Column(name ="time_of_death")
     //private Date date;
 
+    //victim of the kill
     @OneToOne
     @JoinColumn(name="victim_id")
     private Player victim;
-
+    //a game can have multiple kills
     @ManyToOne
     @JoinColumn(name="game_id")
     private Game game;
-
+    //a player can have multiple kills
     @ManyToOne
     @JoinColumn(name="killer_id")
     private Player killer;

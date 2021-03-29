@@ -2,7 +2,12 @@ package com.experis.humansvszombies.models;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import javax.persistence.*;
-
+/*
+* Entity class modelling a single chat message.
+* A chat message can be either part of human or zombie chat.
+*
+* TODO: rename columns and refactor chat / message logic
+ */
 @Entity
 public class Message {
 
@@ -11,8 +16,10 @@ public class Message {
     private long id;
     @Column(name = "message")
     private String message;
+    //TODO: rename column
     @Column(name="is_human_global")
     private boolean isHuman;
+    //TODO: rename column
     @Column(name="is_zombie_global")
     private boolean isZombie;
 

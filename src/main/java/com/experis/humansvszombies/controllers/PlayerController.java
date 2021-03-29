@@ -28,32 +28,19 @@ public class PlayerController {
 
     @GetMapping("/currentplayer")
     public ResponseEntity<Player> getLoggedPlayer(@PathVariable long gameId){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userId = auth.getPrincipal().toString();
-        System.out.println(userId);
-        return new ResponseEntity<>(playerService.getLoggedInPlayer(userId, gameId), HttpStatus.OK);
-
+        return new ResponseEntity<>(playerService.getLoggedInPlayer(gameId), HttpStatus.OK);
     }
 
     @GetMapping("/{userId}")
     public ResponseEntity<Player> getPlayerById(@PathVariable Long gameId, @PathVariable long userId){
         Player returnedPlayer = playerService.getPlayerById(gameId, userId);
-        HttpStatus status;
-
-        if (returnedPlayer != null) {
-            status = HttpStatus.OK;
-        } else {
-            status = HttpStatus.NOT_FOUND;
-        }
+        HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(returnedPlayer, status);
     }
 
     @PostMapping
     public  ResponseEntity<Player> addPlayer(@PathVariable Long gameId, @RequestBody Player player) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userId = auth.getPrincipal().toString();
-        System.out.println(userId);
-        Player addedPlayer = playerService.addPlayer(gameId, player, userId);
+        Player addedPlayer = playerService.addPlayer(gameId, player);
         HttpStatus status = HttpStatus.CREATED;
         return new ResponseEntity<>(addedPlayer, status);
     }

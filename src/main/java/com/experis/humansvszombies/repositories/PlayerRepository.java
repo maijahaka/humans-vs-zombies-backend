@@ -8,7 +8,8 @@ import java.util.List;
 
 @Repository
 public interface PlayerRepository extends JpaRepository<Player, String> {
-    Player findByUserIdAndGame_Id(String userId, long gameId);
-    Player findByIdAndGame_Id(long id, long gameId);
-    List<Player> findAllByGame_Id(long gameId);
+    Player findByUserIdAndGame_Id(String userId, long gameId); //find a user by userid (jwt subject_id) and game id
+    Player findByIdAndGame_Id(long id, long gameId);    //find a user by id (user primary key) and game id
+    List<Player> findAllByGame_Id(long gameId);     //find all players in a game by gameid
+
 }

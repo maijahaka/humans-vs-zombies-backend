@@ -6,11 +6,19 @@ import com.experis.humansvszombies.repositories.GameRepository;
 import com.experis.humansvszombies.repositories.PlayerRepository;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+* Player service acts as an middle-man between Player REST controller and Player Repository.
+*
+ */
 @Service
 public class PlayerService {
 
@@ -20,40 +28,60 @@ public class PlayerService {
     @Autowired
     GameRepository gameRepository;
 
-    public Player getLoggedInPlayer(String userId, long gameId){
+    //returns the player object for the authenticated user in a given game
+    public Player getLoggedInPlayer(long gameId){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        //if get was made by 'anonymousUser' throw http unauthorized
+        if (auth instanceof AnonymousAuthenticationToken)
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not logged in as a user");
+
+        //if player hasn't registered in the game throw http not found
+        String userId = auth.getPrincipal().toString();
+        if (playerRepository.findByUserIdAndGame_Id(userId, gameId) == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User has no player object in the game");
+
         return playerRepository.findByUserIdAndGame_Id(userId, gameId);
     }
 
+    //return all player objects in given game
     public List<Player> getAllPlayers(long gameId) {
         return playerRepository.findAllByGame_Id(gameId);
     }
 
+    //return a player by primary key in given game, if one exists
     public Player getPlayerById(Long gameId, long id) {
+        //if no player object is found with the given player primary key throw http not found
         if (playerRepository.findByIdAndGame_Id(id, gameId) == null) {
-            return null;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No player id found in the game");
         }
-
-        Player player = playerRepository.findByIdAndGame_Id(id, gameId);
-
-        if (player.getGame().getId() != gameId) {
-            return null;
-        }
-
-        return player;
+        return playerRepository.findByIdAndGame_Id(id, gameId);
     }
 
-    public Player addPlayer(Long gameId, Player player, String userId) {
-        if (playerRepository.findByUserIdAndGame_Id(userId, gameId) != null){
-            return null;
-        }
-        if (!player.isPatientZero()) {
+    //adds / registers a player to the given game.
+    public Player addPlayer(Long gameId, Player player) {
+        //get authentication
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        //subject_id of the authenticated users JWT token
+        String userId = auth.getPrincipal().toString();
+        //if player has already registered throw http bad request
+        if (playerRepository.findByUserIdAndGame_Id(userId, gameId) != null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User has already registered in the game");
+        if (!gameRepository.existsById(gameId))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The game doesn't exist");
+
+        //if player is the 'patient zero' make them a zombie
+        if (!player.isPatientZero())
             player.setHuman(true);
-        } else {
+       else
             player.setHuman(false);
-        }
+
+       //create a unique bite code string for the player
         player.setBiteCode(createBiteCode());
+        //set user_id as jwt subject_id
         player.setUserId(userId);
         Game game = gameRepository.findById(gameId).get();
+        //set players game and initialize empty arrays for kills and messages
         player.setGame(game);
         player.setMessages(new ArrayList<>());
         player.setKills(new ArrayList<>());
@@ -63,25 +91,20 @@ public class PlayerService {
 
     public Player updatePlayer(Long gameId, String playerId, Player player) {
         if (!playerRepository.existsById(playerId)) {
-            return null;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No player id found in the game");
         }
 
         if (player.getGame().getId() != gameId) {
-            return null;
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Path variable and request body doesn't match");
         }
 
         return playerRepository.save(player);
     }
 
+    //deletes a player from the game
     public boolean deletePlayer(Long gameId, String playerId) {
         if (!playerRepository.existsById(playerId)) {
-            return false;
-        }
-
-        Player player = playerRepository.findById(playerId).get();
-
-        if (player.getGame().getId() != gameId) {
-            return false;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No player id found in the game");
         }
 
         playerRepository.deleteById(playerId);

@@ -2,9 +2,18 @@ package com.experis.humansvszombies.models;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+/*
+* Entity class modelling a single HVZ game.
+*
+* HVZ game is made of players that are either zombies or humans.
+* Game has 3 states - registration, in progress and finished state. Players can only join the game in the registration state.
+*
+* HVZ Game has also functionality e.g. for a chat, for custom rules
+* and for a custom location (displayed as a map in the front end).
+ */
 
 @Entity
 public class Game {
@@ -32,16 +41,20 @@ public class Game {
     @Column(name= "longitude")
     private Float longitude;
 
+    //one game can contain multiple players
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     List<Player> players;
 
+    //one game can contain multiple kills
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     List<Kill> kills;
 
+    //one game has one chat
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "chat_id")
     private Chat chat;
 
+    //JsonGetters to stop infinite looping of json response
     @JsonGetter("players")
     public List<String> playersGetter() {
         return players.stream()

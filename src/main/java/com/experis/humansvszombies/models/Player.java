@@ -5,6 +5,16 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/*
+* Entity class modeling a player in the game.
+
+* A player is either a zombie or a human. Zombies can inflict (kill) human players.
+* Player has an unique bite code that is given to the zombie when killed. Inputting this bite code will turn the
+* player into a zombie.
+*
+* Each player object has a 'userId' column which refers to JWT token subject_id field of authenticated user.
+ */
+
 @Entity
 public class Player {
 
@@ -12,6 +22,7 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    //column for JWT token subject_id
     @Column(name = "user_id")
     private String userId;
 
@@ -24,7 +35,7 @@ public class Player {
     @Column(name = "bite_code", unique = true)
     private String biteCode;
 
-   //@ManyToOne
+    //@ManyToOne
     //@JoinColumn(name="user_id")
     //private AppUser user;
 
@@ -41,6 +52,8 @@ public class Player {
     @OneToOne(mappedBy ="victim")
     private Kill victimOf;
 
+
+    //JsonGetters to stop the formation of infinite json loops
     @JsonGetter("messages")
     public List<String> messagesGetter() {
         return messages.stream()
