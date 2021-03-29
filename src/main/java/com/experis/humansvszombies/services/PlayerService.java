@@ -28,12 +28,12 @@ public class PlayerService {
         return playerRepository.findAllByGame_Id(gameId);
     }
 
-    public Player getPlayerById(Long gameId, String userId) {
-        if (playerRepository.findByUserIdAndGame_Id(userId, gameId) == null) {
+    public Player getPlayerById(Long gameId, long id) {
+        if (playerRepository.findByIdAndGame_Id(id, gameId) == null) {
             return null;
         }
 
-        Player player = playerRepository.findByUserIdAndGame_Id(userId, gameId);
+        Player player = playerRepository.findByIdAndGame_Id(id, gameId);
 
         if (player.getGame().getId() != gameId) {
             return null;

@@ -45,7 +45,7 @@ public class Game {
     @JsonGetter("players")
     public List<String> playersGetter() {
         return players.stream()
-                .map(player -> "/api/v1/players/" + player.getId())
+                .map(player -> "/api/v1/games/" + this.id + "/players/" + player.getId())
                 .collect(Collectors.toList());
     }
 

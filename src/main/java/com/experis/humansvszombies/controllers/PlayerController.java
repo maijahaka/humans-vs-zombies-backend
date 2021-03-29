@@ -36,7 +36,7 @@ public class PlayerController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Player> getPlayerById(@PathVariable Long gameId, @PathVariable String userId){
+    public ResponseEntity<Player> getPlayerById(@PathVariable Long gameId, @PathVariable long userId){
         Player returnedPlayer = playerService.getPlayerById(gameId, userId);
         HttpStatus status;
 
