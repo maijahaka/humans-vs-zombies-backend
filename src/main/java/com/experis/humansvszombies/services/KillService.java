@@ -1,5 +1,6 @@
 package com.experis.humansvszombies.services;
 
+import com.experis.humansvszombies.config.DefaultAuthenticationProvider;
 import com.experis.humansvszombies.models.Kill;
 import com.experis.humansvszombies.models.Player;
 import com.experis.humansvszombies.models.wrappers.BiteCodeKillerWrapper;
@@ -9,6 +10,7 @@ import com.experis.humansvszombies.repositories.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -29,8 +31,10 @@ public class KillService {
             return killRepository.findById(id).get();
         return null;
     }
-   /* public Kill addKill(BiteCodeKillerWrapper biteCodeKillWrapper, long gameId) {
-        Player victim = playerRepository.findPlayerByBiteCode(biteCodeKillWrapper.getBiteCode());
+
+    @Transactional
+   public Kill addKill(BiteCodeKillerWrapper biteCodeKillWrapper, long gameId) {
+        Player victim = playerRepository.findByBiteCode(biteCodeKillWrapper.getBiteCode());
         System.out.println(biteCodeKillWrapper.getKillerId());
         long killerId = biteCodeKillWrapper.getKillerId();
         Player killer = playerRepository.findById(killerId).get();
@@ -47,7 +51,6 @@ public class KillService {
         kill.setStory(biteCodeKillWrapper.getStory());
         kill.setVictim(victim);
         kill.setGame(gameRepository.findById(gameId).get());
-        kill = killRepository.save(kill);
         return kill;
-    }*/
+    }
 }

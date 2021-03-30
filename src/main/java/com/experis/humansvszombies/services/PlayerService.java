@@ -89,7 +89,7 @@ public class PlayerService {
         return playerRepository.save(player);
     }
 
-    public Player updatePlayer(Long gameId, String playerId, Player player) {
+    public Player updatePlayer(Long gameId, Long playerId, Player player) {
         if (!playerRepository.existsById(playerId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No player id found in the game");
         }
@@ -102,7 +102,7 @@ public class PlayerService {
     }
 
     //deletes a player from the game
-    public boolean deletePlayer(Long gameId, String playerId) {
+    public boolean deletePlayer(Long gameId, Long playerId) {
         if (!playerRepository.existsById(playerId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No player id found in the game");
         }

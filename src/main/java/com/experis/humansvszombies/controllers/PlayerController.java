@@ -46,7 +46,7 @@ public class PlayerController {
     }
 
     @PutMapping("/{playerId}")
-    public ResponseEntity<Player> updatePlayer(@PathVariable Long gameId, @PathVariable String playerId, @RequestBody Player player) {
+    public ResponseEntity<Player> updatePlayer(@PathVariable Long gameId, @PathVariable Long playerId, @RequestBody Player player) {
         HttpStatus status;
 
         if (!playerId.equals(player.getId())) {
@@ -66,7 +66,7 @@ public class PlayerController {
     }
 
     @DeleteMapping("/{playerId}")
-    public ResponseEntity<Void> deletePlayer(@PathVariable Long gameId, @PathVariable String playerId) {
+    public ResponseEntity<Void> deletePlayer(@PathVariable Long gameId, @PathVariable Long playerId) {
         HttpStatus status;
         boolean wasDeleted = playerService.deletePlayer(gameId, playerId);
 
