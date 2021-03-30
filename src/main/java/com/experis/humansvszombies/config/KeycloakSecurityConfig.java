@@ -11,10 +11,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
-import org.springframework.security.core.session.SessionRegistryImpl;
-import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
-import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
+
 
 @Configuration
 @EnableWebSecurity
@@ -22,11 +22,14 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        super.configure(http);
-        http.authorizeRequests()
-                .anyRequest()
-                .permitAll();
-        http.csrf().disable();
+        http
+        // Enable CORS and disable CSRF
+        .cors().and().csrf().disable()
+        // stateless session management
+        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+        //TODO: Set permissions on endpoints here
+        .authorizeRequests()
+        .anyRequest().permitAll();
     }
 
     @Autowired
@@ -38,8 +41,8 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
 
     @Bean
     @Override
-    protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
-        return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
+    protected NullAuthenticatedSessionStrategy sessionAuthenticationStrategy() {
+        return new NullAuthenticatedSessionStrategy();
     }
 
     @Bean

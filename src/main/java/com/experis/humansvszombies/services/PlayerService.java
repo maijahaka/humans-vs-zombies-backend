@@ -1,5 +1,6 @@
 package com.experis.humansvszombies.services;
 
+import com.experis.humansvszombies.config.DefaultAuthenticationProvider;
 import com.experis.humansvszombies.models.Game;
 import com.experis.humansvszombies.models.Player;
 import com.experis.humansvszombies.repositories.GameRepository;
@@ -8,8 +9,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -27,17 +26,19 @@ public class PlayerService {
 
     @Autowired
     GameRepository gameRepository;
+    //provides information about the authentication token
+    @Autowired
+    DefaultAuthenticationProvider authentication;
 
     //returns the player object for the authenticated user in a given game
     public Player getLoggedInPlayer(long gameId){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         //if get was made by 'anonymousUser' throw http unauthorized
-        if (auth instanceof AnonymousAuthenticationToken)
+        if (authentication.getAuthentication() instanceof AnonymousAuthenticationToken)
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not logged in as a user");
 
         //if player hasn't registered in the game throw http not found
-        String userId = auth.getPrincipal().toString();
+        String userId = authentication.getPrincipal();
         if (playerRepository.findByUserIdAndGame_Id(userId, gameId) == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User has no player object in the game");
 
@@ -60,10 +61,9 @@ public class PlayerService {
 
     //adds / registers a player to the given game.
     public Player addPlayer(Long gameId, Player player) {
-        //get authentication
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
         //subject_id of the authenticated users JWT token
-        String userId = auth.getPrincipal().toString();
+        String userId = authentication.getPrincipal();
         //if player has already registered throw http bad request
         if (playerRepository.findByUserIdAndGame_Id(userId, gameId) != null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User has already registered in the game");
