@@ -63,7 +63,7 @@ public class ChatService {
 
         Player player = playerRepository.findByUserIdAndGame_Id(userId, id);
         if (player.isHuman())
-            return messageRepository.findAllByChat_IdAndHumanChatIsTrue(chatId);
+            return messageRepository.findAllByChat_IdAndHumanChatIsTrueAndGlobalChatIsFalse(chatId);
         else
             return messageRepository.findAllByChat_IdAndHumanChatIsFalseAndGlobalChatIsFalse(chatId);
     }
