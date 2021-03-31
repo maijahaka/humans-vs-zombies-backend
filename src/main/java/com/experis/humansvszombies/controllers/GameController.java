@@ -47,10 +47,4 @@ public class GameController {
         Game deleted  = gameService.deleteGame(id);
         return new ResponseEntity<>(deleted, HttpStatus.OK);
     }
-
-    @GetMapping("/{id}/chat")
-    public ResponseEntity<List<Message>> getMessages(@PathVariable long id) {
-        List<Message> messageList = gameService.getMessages(id);
-        return new ResponseEntity<>(messageList, HttpStatus.OK);
-    }
 }

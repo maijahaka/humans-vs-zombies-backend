@@ -14,14 +14,13 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "message")
-    private String message;
-    //TODO: rename column
-    @Column(name="is_human_global")
-    private boolean isHuman;
-    //TODO: rename column
-    @Column(name="is_zombie_global")
-    private boolean isZombie;
+
+    @Column(name = "content")
+    private String content;
+    @Column(name="humanChat")
+    private boolean humanChat;
+    @Column(name ="globalChat")
+    private boolean globalChat;
 
     @ManyToOne
     @JoinColumn(name = "chat_id")
@@ -70,27 +69,27 @@ public class Message {
         this.id = id;
     }
 
-    public String getMessage() {
-        return message;
+    public String getContent() {
+        return content;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public boolean isHuman() {
-        return isHuman;
+    public boolean isHumanChat() {
+        return humanChat;
     }
 
-    public void setHuman(boolean human) {
-        isHuman = human;
+    public void setHumanChat(boolean humanChat) {
+        this.humanChat = humanChat;
     }
 
-    public boolean isZombie() {
-        return isZombie;
+    public boolean isGlobalChat() {
+        return globalChat;
     }
 
-    public void setZombie(boolean zombie) {
-        isZombie = zombie;
+    public void setGlobalChat(boolean globalChat) {
+        this.globalChat = globalChat;
     }
 }

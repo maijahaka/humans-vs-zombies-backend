@@ -1,5 +1,6 @@
 package com.experis.humansvszombies.services;
 
+import com.experis.humansvszombies.models.Chat;
 import com.experis.humansvszombies.models.Game;
 import com.experis.humansvszombies.models.GameState;
 import com.experis.humansvszombies.models.Message;
@@ -59,6 +60,8 @@ public class GameService {
         game.setGameState(GameState.REGISTRATION);
         game.setPlayers(new ArrayList<>());
         game.setKills(new ArrayList<>());
+        Chat chat = new Chat();
+        game.setChat(chat);
         return gameRepository.save(game);
     }
 
@@ -92,21 +95,5 @@ public class GameService {
          Game deleted = gameRepository.findById(id).get();
          gameRepository.deleteById(id);
          return deleted;
-    }
-
-    /*
-     * Returns the chat messages of the game as message list.
-     *
-     * Throws ResponseStatusException NOT_FOUND if game doesn't exist.
-     * TODO: Move to chat service
-     */
-    public List<Message> getMessages(long id){
-        if (!gameRepository.existsById(id))
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game ID not found");
-        Game game = gameRepository.getOne(id);
-        long chatId = game.getChat().getId();
-        //if player is zombie -> messageRepository.findAllByisZombieIsTrueAndChat_Id(chatId)
-        //if human -> messageRepository.findAllByisHumanIsTrueAndChat_Id(chatId)
-        return messageRepository.findAllByChat_Id(chatId);
     }
 }

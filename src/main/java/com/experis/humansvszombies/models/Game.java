@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Entity
 public class Game {
+    public Game(){}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
