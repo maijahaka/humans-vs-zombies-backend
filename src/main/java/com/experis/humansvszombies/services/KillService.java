@@ -8,7 +8,9 @@ import com.experis.humansvszombies.repositories.GameRepository;
 import com.experis.humansvszombies.repositories.KillRepository;
 import com.experis.humansvszombies.repositories.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -35,15 +37,20 @@ public class KillService {
     @Transactional
    public Kill addKill(BiteCodeKillerWrapper biteCodeKillWrapper, long gameId) {
         Player victim = playerRepository.findByBiteCode(biteCodeKillWrapper.getBiteCode());
-        System.out.println(biteCodeKillWrapper.getKillerId());
+        if (victim == null || victim.getGame().getId() != gameId) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No player was found with the bite code entered.");
+        }
+
         long killerId = biteCodeKillWrapper.getKillerId();
         Player killer = playerRepository.findById(killerId).get();
+
         if (killer.isHuman())
-            return null;
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only zombies can kill human players.");
         if (!victim.isHuman())
-            return null;
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The victim has already been turned into a zombie.");
 
         victim.setHuman(false);
+
         Kill kill = new Kill();
         kill.setLat(biteCodeKillWrapper.getLat());
         kill.setLng(biteCodeKillWrapper.getLng());
@@ -52,8 +59,10 @@ public class KillService {
         kill.setVictim(victim);
         kill.setGame(gameRepository.findById(gameId).get());
         Kill storedKill = killRepository.save(kill);
+
         victim.setVictimOf(storedKill);
         killer.getKills().add(storedKill);
+
         return kill;
     }
 }
