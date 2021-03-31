@@ -40,7 +40,7 @@ public class PlayerService {
         //if player hasn't registered in the game throw http not found
         String userId = authentication.getPrincipal();
         if (playerRepository.findByUserIdAndGame_Id(userId, gameId) == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User has no player object in the game");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"User has no player object in the game");
 
         return playerRepository.findByUserIdAndGame_Id(userId, gameId);
     }
