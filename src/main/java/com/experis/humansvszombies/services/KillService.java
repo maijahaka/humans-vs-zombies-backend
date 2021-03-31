@@ -51,6 +51,9 @@ public class KillService {
         kill.setStory(biteCodeKillWrapper.getStory());
         kill.setVictim(victim);
         kill.setGame(gameRepository.findById(gameId).get());
+        Kill storedKill = killRepository.save(kill);
+        victim.setVictimOf(storedKill);
+        killer.getKills().add(storedKill);
         return kill;
     }
 }
