@@ -64,6 +64,7 @@ public class PlayerService {
 
         //subject_id of the authenticated users JWT token
         String userId = authentication.getPrincipal();
+        System.out.println(userId);
         //if player has already registered throw http bad request
         if (playerRepository.findByUserIdAndGame_Id(userId, gameId) != null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User has already registered in the game");
