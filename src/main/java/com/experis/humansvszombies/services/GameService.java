@@ -72,13 +72,25 @@ public class GameService {
     * Throws ResponseStatusException HttpStatus.BAD_REQUEST if no name is given in the request body
     * Throws ResponseStatusException NOT_FOUND if game doesn't exist.
     */
-    public Game updateGame(long id, Game game) {
-        if(id != game.getId())
+    public Game updateGame(long id, Game updatedGame) {
+
+        if(id != updatedGame.getId())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Path id doesn't match the request body id");
         if(!gameRepository.existsById(id))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game ID not found");
-        if (game.getName() == null)
+        if (updatedGame.getName() == null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You must name the game");
+
+        Game game = gameRepository.getOne(id);
+
+        if (updatedGame.getName() != null)
+            game.setName(updatedGame.getName());
+        if (updatedGame.getDescription() != null)
+            game.setDescription(updatedGame.getDescription());
+        if (updatedGame.getRules() != null)
+            game.setRules(updatedGame.getRules());
+        if (updatedGame.getGameState() != null)
+            game.setGameState(updatedGame.getGameState());
 
         return gameRepository.save(game);
     }
