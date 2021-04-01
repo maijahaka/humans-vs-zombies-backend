@@ -26,6 +26,9 @@ public class Player {
     @Column(name = "user_id")
     private String userId;
 
+    @Column(name = "player_name")
+    private String playerName;
+
     @Column(name = "is_human")
     private boolean isHuman;
 
@@ -88,6 +91,14 @@ public class Player {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 
     public boolean isHuman() {

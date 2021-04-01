@@ -61,7 +61,6 @@ public class PlayerService {
 
     //adds / registers a player to the given game.
     public Player addPlayer(Long gameId, Player player) {
-
         //subject_id of the authenticated users JWT token
         String userId = authentication.getPrincipal();
         System.out.println(userId);
@@ -71,11 +70,9 @@ public class PlayerService {
         if (!gameRepository.existsById(gameId))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The game doesn't exist");
 
-        //if player is the 'patient zero' make them a zombie
-        if (!player.isPatientZero())
-            player.setHuman(true);
-       else
-            player.setHuman(false);
+        //Set default values for isHuman and isPatientZero
+        player.setHuman(true);
+        player.setPatientZero(false);
 
        //create a unique bite code string for the player
         player.setBiteCode(createBiteCode());
