@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface KillRepository extends JpaRepository<Kill, Long> {
     List<Kill> findAllByGame_Id(long id);
+    boolean existsByVictimId(Long victimId);
+    void deleteByVictimId(Long victimId);
 }

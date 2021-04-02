@@ -4,6 +4,7 @@ import com.experis.humansvszombies.config.DefaultAuthenticationProvider;
 import com.experis.humansvszombies.models.Game;
 import com.experis.humansvszombies.models.Player;
 import com.experis.humansvszombies.repositories.GameRepository;
+import com.experis.humansvszombies.repositories.KillRepository;
 import com.experis.humansvszombies.repositories.PlayerRepository;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 /*
@@ -26,6 +28,10 @@ public class PlayerService {
 
     @Autowired
     GameRepository gameRepository;
+
+    @Autowired
+    KillRepository killRepository;
+
     //provides information about the authentication token
     @Autowired
     DefaultAuthenticationProvider authentication;
@@ -87,6 +93,7 @@ public class PlayerService {
         return playerRepository.save(player);
     }
 
+    @Transactional
     public Player updatePlayer(Long gameId, Long playerId, Player player) {
         if (!playerRepository.existsById(playerId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No player id found in the game");
@@ -94,6 +101,11 @@ public class PlayerService {
 
         if (player.getGame().getId() != gameId) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Path variable and request body doesn't match");
+        }
+
+        // if a player that has been killed is turned back into a human, the kill is deleted
+        if (player.isHuman() && killRepository.existsByVictimId(player.getId())) {
+            killRepository.deleteByVictimId(player.getId());
         }
 
         return playerRepository.save(player);
