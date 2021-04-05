@@ -49,4 +49,7 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
     public KeycloakConfigResolver KeycloakConfigResolver() {
         return new KeycloakSpringBootConfigResolver();
     }
+
+    @Bean
+    public DefaultAuthenticationProvider defaultAuthenticationProvider(){return  new DefaultAuthenticationProvider();}
 }

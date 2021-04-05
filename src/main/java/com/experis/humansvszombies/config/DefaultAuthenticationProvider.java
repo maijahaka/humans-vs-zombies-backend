@@ -12,7 +12,7 @@ import java.util.ArrayList;
 *
  */
 
-@Component
+
 public class DefaultAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication getAuthentication() {
