@@ -37,7 +37,7 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
     protected NullAuthenticatedSessionStrategy sessionAuthenticationStrategy() {
         return new NullAuthenticatedSessionStrategy();
     }
-
+    //a bean providing authentication object. Gives access to information about JWT token.
     @Bean
     public DefaultAuthenticationProvider defaultAuthenticationProvider(){return new DefaultAuthenticationProvider();}
 

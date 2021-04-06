@@ -10,4 +10,5 @@ public interface AuthenticationProvider {
     Authentication getAuthentication();
     String getPrincipal();
     List<GrantedAuthority> getAuthorities();
+    Boolean isAdmin();
 }
