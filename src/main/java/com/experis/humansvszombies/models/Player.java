@@ -67,14 +67,14 @@ public class Player {
     @JsonGetter("kills")
     public List<String> victimsGetter() {
         return this.kills.stream()
-                .map(kill -> "/api/v1/players/" + kill.getVictim().getId())
+                .map(kill -> "/api/v1/games/" + this.getGame().getId() + "/players/" + kill.getVictim().getId())
                 .collect(Collectors.toList());
     }
 
     @JsonGetter("victimOf")
     public String victimOf(){
         if (this.victimOf != null)
-            return "/api/v1/players/" + this.victimOf.getKiller().getId();
+            return "/api/v1/games/" +this.victimOf.getKiller().getGame().getId() + "/players/" + this.victimOf.getKiller().getId();
         return null;
     }
 

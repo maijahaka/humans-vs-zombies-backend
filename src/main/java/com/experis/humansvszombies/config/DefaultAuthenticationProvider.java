@@ -2,17 +2,14 @@ package com.experis.humansvszombies.config;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 /*
-* Component that offers access to Authentication context, tokens subject_id
-* and list of roles.
+* Implements the AuthenticationProvider interface. Giving access to JWT's subject_id,
+* roles, authentication object and a boolean check returning does the token belong to an admin.
 *
  */
-
-@Component
 public class DefaultAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication getAuthentication() {
@@ -27,5 +24,12 @@ public class DefaultAuthenticationProvider implements AuthenticationProvider {
     @Override
     public ArrayList<GrantedAuthority> getAuthorities() {
         return new ArrayList<>(this.getAuthentication().getAuthorities());
+    }
+
+    @Override
+    public Boolean isAdmin() {
+        ArrayList<GrantedAuthority> authorities = this.getAuthorities();
+        SimpleGrantedAuthority admin = new SimpleGrantedAuthority("ROLE_admin");
+        return authorities.contains(admin);
     }
 }
