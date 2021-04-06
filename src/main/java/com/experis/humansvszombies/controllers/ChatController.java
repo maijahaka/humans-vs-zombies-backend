@@ -9,6 +9,7 @@ import com.experis.humansvszombies.services.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -21,8 +22,12 @@ public class ChatController {
     @Autowired
     ChatService chatService;
 
+    @Autowired
+    SimpMessagingTemplate messagingTemplate;
+
     @PostMapping
     public ResponseEntity<Message> addMessage(@RequestBody Message message, @PathVariable long id) {
+        messagingTemplate.convertAndSend("/topic/addChatMessage", id);
         return new ResponseEntity<>(chatService.addMessage(message, id), HttpStatus.OK);
     }
     @GetMapping("/global")
