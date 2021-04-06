@@ -46,7 +46,7 @@ public class PlayerController {
     public  ResponseEntity<Player> addPlayer(@PathVariable Long gameId, @RequestBody Player player) {
         Player addedPlayer = playerService.addPlayer(gameId, player);
         HttpStatus status = HttpStatus.CREATED;
-        messagingTemplate.convertAndSend("/topic/addPlayer", addedPlayer.getId());
+        messagingTemplate.convertAndSend("/topic/addPlayer", gameId);
         return new ResponseEntity<>(addedPlayer, status);
     }
 
@@ -67,6 +67,8 @@ public class PlayerController {
         }
 
         status = HttpStatus.OK;
+
+        messagingTemplate.convertAndSend("/topic/updatePlayer", gameId);
         return new ResponseEntity<>(updatedPlayer, status);
     }
 
@@ -81,7 +83,7 @@ public class PlayerController {
             status = HttpStatus.NOT_FOUND;
         }
 
-        messagingTemplate.convertAndSend("/topic/deletePlayer", playerId);
+        messagingTemplate.convertAndSend("/topic/deletePlayer", gameId);
 
         return new ResponseEntity<>(status);
     }
