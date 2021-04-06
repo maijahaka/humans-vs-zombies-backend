@@ -53,7 +53,7 @@ public class PlayerService {
 
     //return all player objects in given game
     public List<Player> getAllPlayers(long gameId) {
-        return playerRepository.findAllByGame_Id(gameId);
+        return playerRepository.findAllByGame_IdOrderById(gameId);
     }
 
     //return a player by primary key in given game, if one exists
