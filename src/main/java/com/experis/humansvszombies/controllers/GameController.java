@@ -1,11 +1,13 @@
 package com.experis.humansvszombies.controllers;
 
 import com.experis.humansvszombies.models.Game;
-import com.experis.humansvszombies.models.Message;
 import com.experis.humansvszombies.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -17,6 +19,8 @@ public class GameController {
     @Autowired
     private GameService gameService;
 
+    @Autowired
+    SimpMessagingTemplate messagingTemplate;
 
     @GetMapping()
     public ResponseEntity<List<Game>> getAllGames() {
@@ -33,6 +37,7 @@ public class GameController {
     @PostMapping()
     public ResponseEntity<Game> addGame(@RequestBody Game game) {
         Game addedGame = gameService.addGame(game);
+        messagingTemplate.convertAndSend("/topic/addGame", addedGame.getId());
         return new ResponseEntity<>(addedGame, HttpStatus.CREATED);
     }
 
@@ -43,8 +48,11 @@ public class GameController {
     }
 
     @DeleteMapping("/{id}")
+    @MessageMapping("/api/v1/games/{gameId}")
+    @SendTo("/topic/deleteGame")
     public ResponseEntity<Game> deleteGame(@PathVariable long id) {
         Game deleted  = gameService.deleteGame(id);
+        messagingTemplate.convertAndSend("/topic/deleteGame", "message");
         return new ResponseEntity<>(deleted, HttpStatus.OK);
     }
 }
