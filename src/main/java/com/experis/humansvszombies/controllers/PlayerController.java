@@ -5,6 +5,7 @@ import com.experis.humansvszombies.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,9 @@ public class PlayerController {
 
     @Autowired
     PlayerService playerService;
+
+    @Autowired
+    SimpMessagingTemplate messagingTemplate;
 
     @GetMapping
     public ResponseEntity<List<Player>> getAllPlayers(@PathVariable long gameId) {
@@ -42,6 +46,7 @@ public class PlayerController {
     public  ResponseEntity<Player> addPlayer(@PathVariable Long gameId, @RequestBody Player player) {
         Player addedPlayer = playerService.addPlayer(gameId, player);
         HttpStatus status = HttpStatus.CREATED;
+        messagingTemplate.convertAndSend("/topic/addPlayer", addedPlayer.getId());
         return new ResponseEntity<>(addedPlayer, status);
     }
 
@@ -75,6 +80,8 @@ public class PlayerController {
         } else {
             status = HttpStatus.NOT_FOUND;
         }
+
+        messagingTemplate.convertAndSend("/topic/deletePlayer", playerId);
 
         return new ResponseEntity<>(status);
     }

@@ -44,15 +44,14 @@ public class GameController {
     @PutMapping("/{id}")
     public ResponseEntity<Game> updateGame(@PathVariable long id, @RequestBody Game game) {
         Game updatedGame = gameService.updateGame(id, game);
+        messagingTemplate.convertAndSend("/topic/updateGame", updatedGame.getId());
         return new ResponseEntity<>(updatedGame, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    @MessageMapping("/api/v1/games/{gameId}")
-    @SendTo("/topic/deleteGame")
     public ResponseEntity<Game> deleteGame(@PathVariable long id) {
         Game deleted  = gameService.deleteGame(id);
-        messagingTemplate.convertAndSend("/topic/deleteGame", "message");
+        messagingTemplate.convertAndSend("/topic/deleteGame", deleted.getId());
         return new ResponseEntity<>(deleted, HttpStatus.OK);
     }
 }
