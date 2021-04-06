@@ -47,13 +47,13 @@ public class Kill {
     @JsonGetter
     public String victim(){
         if (this.victim != null)
-            return "/api/v1/players/" + victim.getId();
+            return "/api/v1/games/" + this.game.getId() + "/players/" + victim.getId();
         return null;
     }
     @JsonGetter
     public String killer(){
         if (this.killer != null)
-            return "/api/v1/players/" + killer.getId();
+            return "/api/v1/games/" + this.game.getId() +"/players/" + killer.getId();
         return null;
     }
 

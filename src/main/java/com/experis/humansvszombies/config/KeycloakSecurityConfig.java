@@ -1,6 +1,6 @@
 package com.experis.humansvszombies.config;
 
-import org.keycloak.adapters.KeycloakConfigResolver;
+
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
 import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
@@ -20,23 +20,16 @@ import org.springframework.security.web.authentication.session.NullAuthenticated
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
 public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-        // Enable CORS and disable CSRF
-        .cors().and().csrf().disable()
-        // stateless session management
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-        //TODO: Set permissions on endpoints here
-        .authorizeRequests()
-        .anyRequest().permitAll();
-    }
-
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) {
-        KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        KeycloakAuthenticationProvider keycloakAuthenticationProvider= keycloakAuthenticationProvider();
         keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
         auth.authenticationProvider(keycloakAuthenticationProvider);
+    }
+
+    @Bean
+    public KeycloakSpringBootConfigResolver KeycloakConfigResolver() {
+        return new KeycloakSpringBootConfigResolver();
     }
 
     @Bean
@@ -44,9 +37,18 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
     protected NullAuthenticatedSessionStrategy sessionAuthenticationStrategy() {
         return new NullAuthenticatedSessionStrategy();
     }
-
+    //a bean providing authentication object. Gives access to information about JWT token.
     @Bean
-    public KeycloakConfigResolver KeycloakConfigResolver() {
-        return new KeycloakSpringBootConfigResolver();
+    public DefaultAuthenticationProvider defaultAuthenticationProvider(){return new DefaultAuthenticationProvider();}
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        super.configure(http);
+        http.cors().and().csrf().disable()
+        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .authorizeRequests()
+                .anyRequest()
+                .permitAll();
     }
 }
