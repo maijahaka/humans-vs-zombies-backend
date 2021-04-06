@@ -30,7 +30,7 @@ public class GameService {
     * Returns all games as a list from the database.
     */
     public List<Game> getAllGames() {
-        List<Game> games = gameRepository.findAll();
+        List<Game> games = gameRepository.findAllByOrderById();
         return games;
     }
 
