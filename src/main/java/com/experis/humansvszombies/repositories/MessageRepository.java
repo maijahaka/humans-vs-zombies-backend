@@ -8,9 +8,9 @@ import java.util.List;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
-    List<Message> findAllByChat_IdAndGlobalChatIsFalse(long id);
-    List<Message> findAllByChat_IdAndHumanChatIsTrueAndGlobalChatIsFalse(long id);
-    List<Message> findAllByChat_IdAndGlobalChatIsTrue(long id);
-    List<Message> findAllByChat_IdAndHumanChatIsFalseAndGlobalChatIsFalse(long id);
+    List<Message> findAllByChat_IdAndGlobalChatIsFalseOrderByTimeStamp(long id);
+    List<Message> findAllByChat_IdAndHumanChatIsTrueAndGlobalChatIsFalseOrderByTimeStamp(long id);
+    List<Message> findAllByChat_IdAndGlobalChatIsTrueOrderByTimeStamp(long id);
+    List<Message> findAllByChat_IdAndHumanChatIsFalseAndGlobalChatIsFalseOrderByTimeStamp(long id);
 
 }

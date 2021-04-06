@@ -66,7 +66,7 @@ public class ChatService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game ID not found");
         Game game = gameRepository.findById(id).get();
         long chatId = game.getChat().getId();
-        return messageRepository.findAllByChat_IdAndGlobalChatIsTrue(chatId);
+        return messageRepository.findAllByChat_IdAndGlobalChatIsTrueOrderByTimeStamp(chatId);
     }
 
     /*
@@ -82,7 +82,7 @@ public class ChatService {
         //if JWT has admin role return all messages
         if(defaultAuthenticationProvider.isAdmin()) {
             System.out.println(defaultAuthenticationProvider.getAuthorities());
-            return messageRepository.findAllByChat_IdAndGlobalChatIsFalse(chatId);
+            return messageRepository.findAllByChat_IdAndGlobalChatIsFalseOrderByTimeStamp(chatId);
         }
 
         String userId = defaultAuthenticationProvider.getPrincipal();
@@ -92,8 +92,8 @@ public class ChatService {
         Player player = playerRepository.findByUserIdAndGame_Id(userId, id);
         //check whether the player is a zombie or a human and return messages accordingly.
         if (player.isHuman())
-            return messageRepository.findAllByChat_IdAndHumanChatIsTrueAndGlobalChatIsFalse(chatId);
+            return messageRepository.findAllByChat_IdAndHumanChatIsTrueAndGlobalChatIsFalseOrderByTimeStamp(chatId);
         else
-            return messageRepository.findAllByChat_IdAndHumanChatIsFalseAndGlobalChatIsFalse(chatId);
+            return messageRepository.findAllByChat_IdAndHumanChatIsFalseAndGlobalChatIsFalseOrderByTimeStamp(chatId);
     }
 }
