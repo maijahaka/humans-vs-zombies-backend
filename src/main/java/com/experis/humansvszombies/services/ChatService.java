@@ -82,7 +82,7 @@ public class ChatService {
         //if JWT has admin role return all messages
         if(defaultAuthenticationProvider.isAdmin()) {
             System.out.println(defaultAuthenticationProvider.getAuthorities());
-            return messageRepository.findAllByChat_Id(chatId);
+            return messageRepository.findAllByChat_IdAndGlobalChatIsFalse(chatId);
         }
 
         String userId = defaultAuthenticationProvider.getPrincipal();
