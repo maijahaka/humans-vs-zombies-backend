@@ -6,6 +6,7 @@ import com.experis.humansvszombies.services.KillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,9 @@ import java.util.List;
 public class KillController {
     @Autowired
     private KillService killService;
+
+    @Autowired
+    SimpMessagingTemplate messagingTemplate;
 
     @GetMapping
     public ResponseEntity<List<Kill>> getAllKills(@PathVariable long gameId) {
@@ -33,6 +37,7 @@ public class KillController {
     public ResponseEntity<Kill> addKill(@RequestBody BiteCodeKillerWrapper kill, @PathVariable long gameId){
         Kill addedKill = killService.addKill(kill, gameId);
         HttpStatus status = HttpStatus.OK;
+        messagingTemplate.convertAndSend("/topic/addKill", gameId);
         return new ResponseEntity<>(addedKill, status);
     }
 }
