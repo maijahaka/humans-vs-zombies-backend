@@ -2,7 +2,6 @@ package com.experis.humansvszombies.repositories;
 
 import com.experis.humansvszombies.models.Game;
 import com.experis.humansvszombies.models.Player;
-import com.experis.humansvszombies.repositories.projections.KillProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -49,7 +48,4 @@ public interface GameRepository extends JpaRepository<Game, Long> {
             nativeQuery = true
     )
     Map<Player, Integer> topPlayer(Long gameId);
-
-    List<KillProjection> findAllByGame_Id(long gameId);
-
 }

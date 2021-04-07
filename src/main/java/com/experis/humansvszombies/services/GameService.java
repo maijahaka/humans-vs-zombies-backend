@@ -123,8 +123,7 @@ public class GameService {
             KillStatisticsWrapper ksWrapper = new KillStatisticsWrapper();
             ksWrapper.setKillerName(kill.getKiller().getPlayerName());
             ksWrapper.setVictimName(kill.getVictim().getPlayerName());
-            if (kill.getTimeStamp() != null)
-                ksWrapper.setTimeStamp(kill.getTimeStamp());
+            ksWrapper.setTimeStamp(kill.getTimeStamp());
             responseKillList.add(ksWrapper);
         }
         //number of kills in the game
