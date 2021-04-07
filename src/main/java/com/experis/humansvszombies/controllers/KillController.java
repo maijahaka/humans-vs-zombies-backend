@@ -1,6 +1,9 @@
 package com.experis.humansvszombies.controllers;
 
 import com.experis.humansvszombies.models.Kill;
+import com.experis.humansvszombies.models.stomp.KillStompMessage;
+import com.experis.humansvszombies.models.stomp.StompMessage;
+import com.experis.humansvszombies.models.stomp.StompMessageType;
 import com.experis.humansvszombies.models.wrappers.BiteCodeKillerWrapper;
 import com.experis.humansvszombies.services.KillService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +40,8 @@ public class KillController {
     public ResponseEntity<Kill> addKill(@RequestBody BiteCodeKillerWrapper kill, @PathVariable long gameId){
         Kill addedKill = killService.addKill(kill, gameId);
         HttpStatus status = HttpStatus.OK;
-        messagingTemplate.convertAndSend("/topic/addKill", gameId);
+        KillStompMessage stompMessage = new KillStompMessage(gameId, StompMessageType.ADD_KILL, addedKill.getVictim().getId(), addedKill.getKiller().getPlayerName(), addedKill.getStory());
+        messagingTemplate.convertAndSend("/topic/addKill", stompMessage);
         return new ResponseEntity<>(addedKill, status);
     }
 }

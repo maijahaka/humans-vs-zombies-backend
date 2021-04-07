@@ -1,6 +1,8 @@
 package com.experis.humansvszombies.controllers;
 
 import com.experis.humansvszombies.models.Player;
+import com.experis.humansvszombies.models.stomp.StompMessage;
+import com.experis.humansvszombies.models.stomp.StompMessageType;
 import com.experis.humansvszombies.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,7 +48,8 @@ public class PlayerController {
     public  ResponseEntity<Player> addPlayer(@PathVariable Long gameId, @RequestBody Player player) {
         Player addedPlayer = playerService.addPlayer(gameId, player);
         HttpStatus status = HttpStatus.CREATED;
-        messagingTemplate.convertAndSend("/topic/addPlayer", gameId);
+        StompMessage stompMessage = new StompMessage(gameId, StompMessageType.ADD_PLAYER);
+        messagingTemplate.convertAndSend("/topic/addPlayer", stompMessage);
         return new ResponseEntity<>(addedPlayer, status);
     }
 
@@ -68,7 +71,8 @@ public class PlayerController {
 
         status = HttpStatus.OK;
 
-        messagingTemplate.convertAndSend("/topic/updatePlayer", gameId);
+        StompMessage stompMessage = new StompMessage(gameId, StompMessageType.UPDATE_PLAYER);
+        messagingTemplate.convertAndSend("/topic/updatePlayer", stompMessage);
         return new ResponseEntity<>(updatedPlayer, status);
     }
 
@@ -83,7 +87,8 @@ public class PlayerController {
             status = HttpStatus.NOT_FOUND;
         }
 
-        messagingTemplate.convertAndSend("/topic/deletePlayer", gameId);
+        StompMessage stompMessage = new StompMessage(gameId, StompMessageType.DELETE_PLAYER);
+        messagingTemplate.convertAndSend("/topic/deletePlayer", stompMessage);
 
         return new ResponseEntity<>(status);
     }

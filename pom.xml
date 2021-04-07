@@ -14,7 +14,7 @@
     <name>humans-vs-zombies</name>
     <description>A RESTful API to manage the state of a game of tag</description>
     <properties>
-        <java.version>15</java.version>
+        <java.version>11</java.version>
         <keycloak.version>12.0.4</keycloak.version>
     </properties>
     <dependencies>
