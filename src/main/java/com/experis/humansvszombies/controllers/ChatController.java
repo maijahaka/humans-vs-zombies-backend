@@ -3,6 +3,8 @@ package com.experis.humansvszombies.controllers;
 import com.experis.humansvszombies.models.Chat;
 import com.experis.humansvszombies.models.Game;
 import com.experis.humansvszombies.models.Message;
+import com.experis.humansvszombies.models.stomp.StompMessage;
+import com.experis.humansvszombies.models.stomp.StompMessageType;
 import com.experis.humansvszombies.repositories.GameRepository;
 import com.experis.humansvszombies.repositories.MessageRepository;
 import com.experis.humansvszombies.services.ChatService;
@@ -27,7 +29,8 @@ public class ChatController {
 
     @PostMapping
     public ResponseEntity<Message> addMessage(@RequestBody Message message, @PathVariable long id) {
-        messagingTemplate.convertAndSend("/topic/addChatMessage", id);
+        StompMessage stompMessage = new StompMessage(id, StompMessageType.ADD_CHAT_MESSAGE);
+        messagingTemplate.convertAndSend("/topic/addChatMessage", stompMessage);
         return new ResponseEntity<>(chatService.addMessage(message, id), HttpStatus.OK);
     }
     @GetMapping("/global")
