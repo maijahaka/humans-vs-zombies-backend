@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +36,7 @@ public class GameController {
         Game game = gameService.getGameById(id);
         return new ResponseEntity<>(game, HttpStatus.OK);
     }
-
+    @RolesAllowed("admin")
     @PostMapping()
     public ResponseEntity<Game> addGame(@RequestBody Game game) {
         Game addedGame = gameService.addGame(game);
@@ -42,7 +44,7 @@ public class GameController {
         messagingTemplate.convertAndSend("/topic/addGame", stompMessage);
         return new ResponseEntity<>(addedGame, HttpStatus.CREATED);
     }
-
+    @RolesAllowed("admin")
     @PutMapping("/{id}")
     public ResponseEntity<Game> updateGame(@PathVariable long id, @RequestBody Game game) {
         Game updatedGame = gameService.updateGame(id, game);
@@ -51,6 +53,7 @@ public class GameController {
         return new ResponseEntity<>(updatedGame, HttpStatus.OK);
     }
 
+    @RolesAllowed("admin")
     @DeleteMapping("/{id}")
     public ResponseEntity<Game> deleteGame(@PathVariable long id) {
         Game deleted  = gameService.deleteGame(id);

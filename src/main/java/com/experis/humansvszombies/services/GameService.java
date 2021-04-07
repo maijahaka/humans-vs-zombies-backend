@@ -4,6 +4,7 @@ import com.experis.humansvszombies.models.*;
 import com.experis.humansvszombies.models.wrappers.KillStatisticsWrapper;
 import com.experis.humansvszombies.repositories.GameRepository;
 import com.experis.humansvszombies.repositories.MessageRepository;
+import org.keycloak.authorization.client.util.Http;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.experis.humansvszombies.models.GameState.COMPLETE;
 
 /*
 * A service class for game controller. Separates the business logic from the controller logic.
@@ -111,9 +114,10 @@ public class GameService {
     public Map<String, Object> getStatistics(long id) {
         if(!gameRepository.existsById(id))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game ID not found");
-
-        //get the game object and initialize map for response
-        Game game = gameRepository.getOne(id);
+        //get the game object and initialize map for response. If game is not over yet, throw http forbidden
+        Game game = gameRepository.findById(id).get();
+        if (game.getGameState() != COMPLETE)
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Game is not over yet");
         Map<String, Object> statistics = new HashMap<String, Object>();
 
         //for each kill in the game construct a wrapper object, containing killer name, victim name and a timestamp

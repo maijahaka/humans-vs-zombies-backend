@@ -1,6 +1,8 @@
 package com.experis.humansvszombies.config;
 
 
+import com.experis.humansvszombies.controllers.exceptions.APIAccessDeniedHandler;
+import com.experis.humansvszombies.controllers.exceptions.APINotAuthorizedHandler;
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
 import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
@@ -20,6 +22,23 @@ import org.springframework.security.web.authentication.session.NullAuthenticated
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
 public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        super.configure(http);
+        http.cors().and().csrf().disable()
+                //APINotAuthorizedHandler provides custom error response when request isn't authorized
+                .exceptionHandling().authenticationEntryPoint(new APINotAuthorizedHandler()).and()
+                //APIAccessDeniedHandler provides custom error response when requester doesn't have privileges
+                .exceptionHandling().accessDeniedHandler(new APIAccessDeniedHandler()).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                .anyRequest()
+                .permitAll();
+    }
+
+    //SimpleAuthorityMapper makes sure roles are not prefixed with 'ROLE_'
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         KeycloakAuthenticationProvider keycloakAuthenticationProvider= keycloakAuthenticationProvider();
@@ -32,6 +51,7 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
         return new KeycloakSpringBootConfigResolver();
     }
 
+    //use NullAuthenticatedSessionStrategy to avoid cookie based sessions
     @Bean
     @Override
     protected NullAuthenticatedSessionStrategy sessionAuthenticationStrategy() {
@@ -39,16 +59,9 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
     }
     //a bean providing authentication object. Gives access to information about JWT token.
     @Bean
-    public DefaultAuthenticationProvider defaultAuthenticationProvider(){return new DefaultAuthenticationProvider();}
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        super.configure(http);
-        http.cors().and().csrf().disable()
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .authorizeRequests()
-                .anyRequest()
-                .permitAll();
+    public DefaultAuthenticationProvider defaultAuthenticationProvider(){
+        return new DefaultAuthenticationProvider();
     }
+
+
 }
