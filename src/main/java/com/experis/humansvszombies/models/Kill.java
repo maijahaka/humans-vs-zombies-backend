@@ -1,7 +1,10 @@
 package com.experis.humansvszombies.models;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /*
 * Entity class modelling a kill in the game.
@@ -21,8 +24,9 @@ public class Kill {
     private float lat;
     @Column(name="lng")
     private float lng;
-    //@Column(name ="time_of_death")
-    //private Date date;
+    @CreationTimestamp
+    @Column(name ="time_of_death")
+    private LocalDateTime timeStamp;
 
     //victim of the kill
     @OneToOne
@@ -111,5 +115,13 @@ public class Kill {
 
     public void setKiller(Player killer) {
         this.killer = killer;
+    }
+
+    public LocalDateTime getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(LocalDateTime timeStamp) {
+        this.timeStamp = timeStamp;
     }
 }

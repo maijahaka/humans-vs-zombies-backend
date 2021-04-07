@@ -5,11 +5,10 @@ import com.experis.humansvszombies.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/api/v1/games")
 @RestController
@@ -53,5 +52,11 @@ public class GameController {
         Game deleted  = gameService.deleteGame(id);
         messagingTemplate.convertAndSend("/topic/deleteGame", deleted.getId());
         return new ResponseEntity<>(deleted, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/statistics")
+    public ResponseEntity<Map<String, Object>> getStatistics(@PathVariable long id) {
+        Map<String, Object> responseMap = gameService.getStatistics(id);
+        return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 }
