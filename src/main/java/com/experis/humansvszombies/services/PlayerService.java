@@ -122,7 +122,13 @@ public class PlayerService {
     }
 
     private String createBiteCode() {
-        // TODO confirm uniqueness
-        return RandomStringUtils.randomNumeric(6);
+        String biteCode = "";
+
+        // create a random unique bite code
+        do {
+            biteCode = RandomStringUtils.randomNumeric(6);
+        } while (playerRepository.existsByBiteCode(biteCode));
+
+        return biteCode;
     }
 }
