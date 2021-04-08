@@ -9,6 +9,7 @@ import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -33,7 +34,13 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
                 .exceptionHandling().accessDeniedHandler(new APIAccessDeniedHandler()).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests()
+                .authorizeRequests().mvcMatchers(HttpMethod.DELETE, "/api/v1/games/{\\d+}").hasRole("admin")
+                .mvcMatchers(HttpMethod.POST, "/api/v1/games").hasRole("admin")
+                .mvcMatchers(HttpMethod.PUT, "/api/v1/games/{\\d+}").hasRole("admin")
+                .mvcMatchers(HttpMethod.PUT, "/api/v1/games/{\\d+}/players/{\\d+}").hasRole("admin")
+                .mvcMatchers(HttpMethod.DELETE, "/api/v1/games/{\\d+}/players/{\\d+}").hasRole("admin")
+                .mvcMatchers(HttpMethod.DELETE, "/api/v1/games/{\\d+}/kill/{\\d+}").hasRole("admin")
+                .mvcMatchers(HttpMethod.PUT, "/api/v1/games/{\\d+}/kill/{\\d+}").hasRole("admin")
                 .anyRequest()
                 .permitAll();
     }
