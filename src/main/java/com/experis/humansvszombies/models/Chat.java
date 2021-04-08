@@ -1,6 +1,8 @@
 package com.experis.humansvszombies.models;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +16,7 @@ public class Chat {
     @OneToOne(mappedBy = "chat")
     private Game game;
 
-    @OneToMany(mappedBy= "chat")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy= "chat")
     private List<Message> messages;
 
     public long getId() {
