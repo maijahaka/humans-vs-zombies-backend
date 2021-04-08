@@ -3,6 +3,7 @@ package com.experis.humansvszombies.services;
 import com.experis.humansvszombies.config.DefaultAuthenticationProvider;
 import com.experis.humansvszombies.models.Game;
 import com.experis.humansvszombies.models.Player;
+import com.experis.humansvszombies.models.projections.PlayerDetailsProjection;
 import com.experis.humansvszombies.repositories.GameRepository;
 import com.experis.humansvszombies.repositories.KillRepository;
 import com.experis.humansvszombies.repositories.PlayerRepository;
@@ -57,12 +58,19 @@ public class PlayerService {
     }
 
     //return a player by primary key in given game, if one exists
-    public Player getPlayerById(Long gameId, long id) {
+    public Object getPlayerById(Long gameId, long id) {
         //if no player object is found with the given player primary key throw http not found
         if (playerRepository.findByIdAndGame_Id(id, gameId) == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No player id found in the game");
         }
-        return playerRepository.findByIdAndGame_Id(id, gameId);
+        //if an admin is making the API call return player object with all fields
+        if (authentication.isAdmin())
+            return playerRepository.findByIdAndGame_Id(id, gameId);
+        //if non-admin makes the api call use UserDetailProjection interface to avoid overposting fields
+        else
+            return playerRepository.findByIdAndGame_Id(id, gameId, PlayerDetailsProjection.class);
+
+
     }
 
     //adds / registers a player to the given game.

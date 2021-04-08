@@ -38,8 +38,8 @@ public class PlayerController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Player> getPlayerById(@PathVariable Long gameId, @PathVariable long userId){
-        Player returnedPlayer = playerService.getPlayerById(gameId, userId);
+    public ResponseEntity<Object> getPlayerById(@PathVariable Long gameId, @PathVariable long userId){
+        Object returnedPlayer = playerService.getPlayerById(gameId, userId);
         HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(returnedPlayer, status);
     }

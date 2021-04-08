@@ -1,6 +1,8 @@
 package com.experis.humansvszombies.models;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,14 +40,11 @@ public class Player {
     @Column(name = "bite_code", unique = true)
     private String biteCode;
 
-    //@ManyToOne
-    //@JoinColumn(name="user_id")
-    //private AppUser user;
-
     @ManyToOne
     @JoinColumn(name="game_id")
     private Game game;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "player")
     private List<Message> messages;
 
@@ -54,15 +53,6 @@ public class Player {
 
     @OneToOne(mappedBy ="victim")
     private Kill victimOf;
-
-
-    //JsonGetters to stop the formation of infinite json loops
-    @JsonGetter("messages")
-    public List<String> messagesGetter() {
-        return messages.stream()
-                .map(message -> "/placeholder/" + message.getId())
-                .collect(Collectors.toList());
-    }
 
     @JsonGetter("kills")
     public List<String> victimsGetter() {
