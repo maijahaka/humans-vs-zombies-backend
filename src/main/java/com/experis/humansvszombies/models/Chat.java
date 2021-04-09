@@ -1,7 +1,6 @@
 package com.experis.humansvszombies.models;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.List;

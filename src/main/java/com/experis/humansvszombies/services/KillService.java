@@ -1,6 +1,5 @@
 package com.experis.humansvszombies.services;
 
-import com.experis.humansvszombies.config.DefaultAuthenticationProvider;
 import com.experis.humansvszombies.models.Kill;
 import com.experis.humansvszombies.models.Player;
 import com.experis.humansvszombies.models.wrappers.BiteCodeKillerWrapper;

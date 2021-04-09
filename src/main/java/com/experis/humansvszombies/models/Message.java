@@ -2,13 +2,9 @@ package com.experis.humansvszombies.models;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /*
 * Entity class modelling a single chat message.

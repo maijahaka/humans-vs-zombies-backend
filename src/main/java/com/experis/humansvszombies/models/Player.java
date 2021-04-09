@@ -115,10 +115,6 @@ public class Player {
         this.biteCode = biteCode;
     }
 
-    //public AppUser getUser() {   return user;   }
-
-   // public void setUser(AppUser user) { this.user = user;  }
-
     public Game getGame() {
         return game;
     }

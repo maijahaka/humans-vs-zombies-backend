@@ -1,5 +1,6 @@
 package com.experis.humansvszombies.models.stomp;
 
+// websocket message model with relevant fields for kills
 public class KillStompMessage extends StompMessage {
     private Long victimId;
     private String killerName;

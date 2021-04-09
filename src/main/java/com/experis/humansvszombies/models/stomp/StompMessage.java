@@ -1,5 +1,6 @@
 package com.experis.humansvszombies.models.stomp;
 
+// basic websocket message model
 public class StompMessage {
     private Long gameId;
     private StompMessageType type;
