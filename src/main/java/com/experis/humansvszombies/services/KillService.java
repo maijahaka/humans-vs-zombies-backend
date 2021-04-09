@@ -24,6 +24,7 @@ public class KillService {
     @Autowired
     private GameRepository gameRepository;
 
+
     public List<Kill> getAllKills(long id) {
         return killRepository.findAllByGame_Id(id);
     }
@@ -64,5 +65,39 @@ public class KillService {
         playerRepository.save(killer);
         playerRepository.save(victim);
         return kill;
+    }
+
+    public Kill deleteKill(long killId){
+        if (!killRepository.existsById(killId))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No kill found with the given kill id");
+
+        Kill kill = killRepository.findById(killId).get();
+        Player victim = kill.getVictim();
+        victim.setVictimOf(null);
+        victim.setHuman(true);
+        Player killer = kill.getKiller();
+        killer.getKills().remove(kill);
+
+        killRepository.deleteById(killId);
+        return kill;
+    }
+
+    public Kill updateKill(long killId, Kill kill){
+        if (!killRepository.existsById(killId) || kill.getId() != killId)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No kill found with the given kill id");
+
+        Kill updatedKill = killRepository.findById(killId).get();
+
+        if (kill.getTimeStamp() != null)
+            updatedKill.setTimeStamp(kill.getTimeStamp());
+        if (kill.getStory() != null)
+            updatedKill.setStory(kill.getStory());
+        if (kill.getLat() != 0)
+            updatedKill.setLat(kill.getLat());
+        if (kill.getLng() != 0)
+            updatedKill.setLng(kill.getLng());
+
+        killRepository.save(updatedKill);
+        return updatedKill;
     }
 }

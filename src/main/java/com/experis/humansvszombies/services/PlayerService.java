@@ -2,6 +2,7 @@ package com.experis.humansvszombies.services;
 
 import com.experis.humansvszombies.config.DefaultAuthenticationProvider;
 import com.experis.humansvszombies.models.Game;
+import com.experis.humansvszombies.models.Kill;
 import com.experis.humansvszombies.models.Player;
 import com.experis.humansvszombies.models.projections.PlayerDetailsProjection;
 import com.experis.humansvszombies.repositories.GameRepository;
@@ -53,8 +54,11 @@ public class PlayerService {
     }
 
     //return all player objects in given game
-    public List<Player> getAllPlayers(long gameId) {
-        return playerRepository.findAllByGame_IdOrderById(gameId);
+    public Object getAllPlayers(long gameId) {
+        if (authentication.isAdmin())
+            return playerRepository.findAllByGame_IdOrderById(gameId);
+        else
+            return playerRepository.findAllByGame_IdOrderById(gameId, PlayerDetailsProjection.class);
     }
 
     //return a player by primary key in given game, if one exists
@@ -120,13 +124,22 @@ public class PlayerService {
     }
 
     //deletes a player from the game
-    public boolean deletePlayer(Long gameId, Long playerId) {
-        if (!playerRepository.existsById(playerId)) {
+    @Transactional
+    public Player deletePlayer(Long gameId, Long playerId) {
+        if (!playerRepository.existsByGameIdAndAndId(gameId, playerId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No player id found in the game");
         }
 
-        playerRepository.deleteById(playerId);
-        return true;
+        Player toDelete = playerRepository.findByIdAndGame_Id(gameId, playerId);
+        List<Kill> killList = toDelete.getKills();
+        for (Kill kill: killList){
+            Player victim = kill.getVictim();
+            victim.setVictimOf(null);
+            victim.setHuman(true);
+            killRepository.deleteById(kill.getId());
+        }
+        playerRepository.deleteByIdAndGame_Id(playerId, gameId);
+        return toDelete;
     }
 
     private String createBiteCode() {
