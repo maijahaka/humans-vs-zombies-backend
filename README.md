@@ -4,9 +4,22 @@ Humans vs. Zombies (HvZ) is a game of tag played at schools, camps, neighborhood
 
 The frontend source code and more details about the application can be found at https://github.com/Satuhoo/humans-vs-zombies-frontend.
 
-## Keycloak instructions
+The Java API paths are guarded and most of them require a JWT that has either 'admin' or 'user' - note the casing - role. There are few open endpoints in the applicaiton that require no authentication, but to get the most out of the API you should pass valid JWTs to the backend in auth-header ('bearer:' + JWT).
 
-The Java backend validates incoming API requests with Keycloaks JWT's. 
+Please see 'Keycloak instructions' below if you wish to get a starting point on what kind of setup is needed to get the API working with Keycloak.
+
+<details>
+<summary>Keycloak instructions</summary>
+  
+## Our deployment
+
+Our deployed application has two clients set up in our Keycloak realm. A Java backend 'bearer only' client and a 'public' front end client.
+
+Users login through the keycloaks server from our front-end, from where we pass the JWT in API calls to back-end in Auth-header ('bearer:' + JWT).
+
+![auth flow](https://i.imgur.com/Q0XilVU.png)
+
+
 If you have docker installed a local Keycloak container can be started with a simple command:
 
 ```
@@ -15,16 +28,39 @@ docker run -p 8080:8080 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin quay.i
 
 NOTE: This will start a Keycloak container running in your localhost port 8080. This might collide with Springs default port so you might have to adjust your ports. You can login to Keycloaks admin console with credentials 'admin / admin' in your localhost address after the container has spun up.
 
-### Configurating Keycloak 
+To authenticate your API requests you should add a new realm and a new client to keycloak. The realm should have 'admin' and 'user' roles. 
 
-You must first create a new realm and add a new Bearer only client for the Java Spring application. The realm roles this application validates against is 'admin' and 'user', be sure to add them in Keycloak. 
+Define your back-ends enviorment variables according to your keycloaks setup, they should be look something like this (depending on your Keycloak setup):
 
-As configuring a Keycloak instance is beyond the scope of this readme
+```
+KEYCLOAK_REALM = your realm
 
 
+KEYCLOAK_AUTH_SERVER_URL = your auth server url
 
 
-## Contributors
+KEYCLOAK_RESOURCE = your keycloak client
+
+
+KEYCLOAK_CREDENTIALS_SECRET = your keycloak secret (not needed, unless you want to implement login throught the backend client)
+
+
+KEYCLOAK_BEARER_ONLY = true (if you have a bearer only client)
+
+
+KEYCLOAK_USE_RESOURCE_ROLE_MAPPINGS = true
+
+
+KEYCLOAK_SSL_REQUIRED = (external)
+```
+
+
+As fully configuring a Keycloak instance is beyond the scope of this readme, I recommend having a look at [Keycloaks offical documentation](https://www.keycloak.org/documentation) if you are new to the subject.  
+
+</details>
+
+
+## Contributors of the project
 
 [Maija Haka](https://github.com/maijahaka), [Okko Partanen](https://github.com/okarp) and [Satu Heikkonen](https://github.com/Satuhoo)
 
@@ -115,11 +151,16 @@ GET/POST/PUT/DELETE: api/v1/games/{id}/players{id}
 
 
 POST adds a player object to the game. 
+
 Requires Auth-header with JWT token, adds the player to the game using JWT's subject_id field.
+
 A playerName should be sent in the body of the request. 
 Returns:
+
 HTTP 400 if no game exists with given id.
+
 HTTP 400 if user has already registered to the game.
+
 The added player if no errors occur.
 
 DELETE removes player object from the game. Requires Auth-header with JWT that has 'admin' role or else HTTP 401 / HTTP 403 is returned.
@@ -175,10 +216,34 @@ The updated kill object if no errors occure.
 
 
 ### Chat
--	POST message
--	GET all messages
--	GET all global messages
 
+```
+GET/POST: api/v1/games/{id}/chat/
+```
+
+
+GET returns chat messages assosicated with given game and players state.
+
+Auth-header with JWT should be sent with request.
+
+Returns:
+
+Zombie chat to players who are zombies, human chat to players who are human, and both chats to JWT with admin role.
+
+HTTP 404 if game id wasn't found or if player (JWTs sub_id) wasn't found in the game.
+
+POST adds new message to the game. Body should contain 'isHuman' (boolean if message is part of human or zombie chat), and 'content', 'global' (boolean if message is part of global chat).
+
+No error checking implemented.
+
+
+
+```
+GET: api/v1/games/{id}/global/
+```
+
+Returns global chat messages in the given game.
+Returns 404 if game id wasn't found.
 </details>
 
 ## Limitations
