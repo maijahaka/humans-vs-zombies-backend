@@ -96,6 +96,8 @@ public class KillService {
             updatedKill.setLat(kill.getLat());
         if (kill.getLng() != 0)
             updatedKill.setLng(kill.getLng());
+        if (kill.getStory() != null)
+            updatedKill.setStory(kill.getStory());
 
         killRepository.save(updatedKill);
         return updatedKill;
