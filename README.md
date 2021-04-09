@@ -4,17 +4,58 @@ Humans vs. Zombies (HvZ) is a game of tag played at schools, camps, neighborhood
 
 The frontend source code and more details about the application can be found at https://github.com/Satuhoo/humans-vs-zombies-frontend.
 
+## Keycloak instructions
+
+The Java backend validates incoming API requests with Keycloaks JWT's. 
+If you have docker installed a local Keycloak container can be started with a simple command:
+
+```
+docker run -p 8080:8080 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin quay.io/keycloak/keycloak:12.0.4
+```
+
+NOTE: This will start a Keycloak container running in your localhost port 8080. This might collide with Springs default port so you might have to adjust your ports. You can login to Keycloaks admin console with credentials 'admin / admin' in your localhost address after the container has spun up.
+
+### Configurating Keycloak 
+
+You must first create a new realm and add a new Bearer only client for the Java Spring application. The realm roles this application validates against is 'admin' and 'user', be sure to add them in Keycloak. 
+
+As configuring a Keycloak instance is beyond the scope of this readme
+
+
+
+
 ## Contributors
 
 [Maija Haka](https://github.com/maijahaka), [Okko Partanen](https://github.com/okarp) and [Satu Heikkonen](https://github.com/Satuhoo)
 
+<details>
+<summary>Open API documentation</summary>
 ## API endpoints
 
-Endpoints are secured by using Spring Security.
+
+Endpoints are secured by using Spring Security. Below is a list of supported methods. A more detailed documentation with response examples can be found in the postman collection, located in the root folder.
 
 ### Game
+
+All the endpoints return 404 if ID parameter does not match any game object in the databse.
+
 -	Full CRUD 
--	GET statistics
+
+GET/POST. POST requires Auth-header with JWT that has 'admin' role or else HTTP 401 / HTTP 403 is returned.
+```
+api/v1/games
+```
+PUT/DELETE. Both require Auth-header with JWT that has 'admin' role or else HTTP 401 / HTTP 403 is returned.
+
+```
+api/v1/games/{id}
+```
+GET statistics of a game. Game state must be 'COMPLETED' or else a HTTP 403 error is returned.
+```
+api/v1/games/{id}/statistics
+```
+
+
 
 ### Player
 -	Full CRUD 
@@ -30,7 +71,7 @@ Endpoints are secured by using Spring Security.
 -	GET all messages
 -	GET all global messages
 
-The postman collection can be found in the root folder.
+</details>
 
 ## Limitations
 
