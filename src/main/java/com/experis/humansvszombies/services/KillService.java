@@ -70,7 +70,14 @@ public class KillService {
     public Kill deleteKill(long killId){
         if (!killRepository.existsById(killId))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No kill found with the given kill id");
+
         Kill kill = killRepository.findById(killId).get();
+        Player victim = kill.getVictim();
+        victim.setVictimOf(null);
+        victim.setHuman(true);
+        Player killer = kill.getKiller();
+        killer.getKills().remove(kill);
+
         killRepository.deleteById(killId);
         return kill;
     }

@@ -77,19 +77,10 @@ public class PlayerController {
     }
 
     @DeleteMapping("/{playerId}")
-    public ResponseEntity<Void> deletePlayer(@PathVariable Long gameId, @PathVariable Long playerId) {
-        HttpStatus status;
-        boolean wasDeleted = playerService.deletePlayer(gameId, playerId);
-
-        if (wasDeleted) {
-            status = HttpStatus.NO_CONTENT;
-        } else {
-            status = HttpStatus.NOT_FOUND;
-        }
-
+    public ResponseEntity<Player> deletePlayer(@PathVariable Long gameId, @PathVariable Long playerId) {
+        Player deleted = playerService.deletePlayer(gameId, playerId);
         StompMessage stompMessage = new StompMessage(gameId, StompMessageType.DELETE_PLAYER);
         messagingTemplate.convertAndSend("/topic/deletePlayer", stompMessage);
-
-        return new ResponseEntity<>(status);
+        return new ResponseEntity<>(deleted, HttpStatus.OK);
     }
 }
