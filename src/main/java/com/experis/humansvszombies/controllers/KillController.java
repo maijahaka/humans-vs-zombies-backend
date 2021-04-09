@@ -44,4 +44,14 @@ public class KillController {
         messagingTemplate.convertAndSend("/topic/addKill", stompMessage);
         return new ResponseEntity<>(addedKill, status);
     }
+
+    @DeleteMapping("/{killId}")
+    public ResponseEntity<Kill> deleteKill(@PathVariable long killId){
+        return new ResponseEntity<>(killService.deleteKill(killId), HttpStatus.OK);
+    }
+
+    @PutMapping("/{killId}")
+    public ResponseEntity<Kill> updateKill(@PathVariable long killId, @RequestBody Kill kill){
+        return new ResponseEntity<Kill>(killService.updateKill(killId, kill), HttpStatus.OK);
+    }
 }

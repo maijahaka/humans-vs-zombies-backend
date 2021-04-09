@@ -39,8 +39,8 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
                 .mvcMatchers(HttpMethod.PUT, "/api/v1/games/{\\d+}").hasRole("admin")
                 .mvcMatchers(HttpMethod.PUT, "/api/v1/games/{\\d+}/players/{\\d+}").hasRole("admin")
                 .mvcMatchers(HttpMethod.DELETE, "/api/v1/games/{\\d+}/players/{\\d+}").hasRole("admin")
-                .mvcMatchers(HttpMethod.DELETE, "/api/v1/games/{\\d+}/kill/{\\d+}").hasRole("admin")
-                .mvcMatchers(HttpMethod.PUT, "/api/v1/games/{\\d+}/kill/{\\d+}").hasRole("admin")
+                .mvcMatchers(HttpMethod.DELETE, "/api/v1/games/{\\d+}/kills/{\\d+}").hasRole("admin")
+                .mvcMatchers(HttpMethod.PUT, "/api/v1/games/{\\d+}/kills/{\\d+}").hasRole("admin")
                 .anyRequest()
                 .permitAll();
     }
