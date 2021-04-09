@@ -2,7 +2,9 @@
 
 Humans vs. Zombies (HvZ) is a game of tag played at schools, camps, neighborhoods, libraries, and conventions around the world. The game simulates the exponential spread of a fictional zombie infection through a population. This application creates the base for the games to playing in the real world.
 
-The frontend source code and more details about the application can be found at https://github.com/Satuhoo/humans-vs-zombies-frontend.
+The frontend source code and more details about the application can be found at: https://github.com/Satuhoo/humans-vs-zombies-frontend.
+
+The API is live at: https://humansvszombies-api.herokuapp.com
 
 The Java API paths are guarded and most of them require a JWT that has either 'admin' or 'user' - note the casing - role. There are few open endpoints in the applicaiton that require no authentication, but to get the most out of the API you should pass valid JWTs to the backend in auth-header ('bearer:' + JWT).
 
