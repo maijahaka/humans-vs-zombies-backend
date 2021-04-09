@@ -26,8 +26,8 @@ public class PlayerController {
     SimpMessagingTemplate messagingTemplate;
 
     @GetMapping
-    public ResponseEntity<List<Player>> getAllPlayers(@PathVariable long gameId) {
-        List<Player> players = playerService.getAllPlayers(gameId);
+    public ResponseEntity<Object> getAllPlayers(@PathVariable long gameId) {
+        Object players = playerService.getAllPlayers(gameId);
         HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(players, status);
     }

@@ -53,8 +53,11 @@ public class PlayerService {
     }
 
     //return all player objects in given game
-    public List<Player> getAllPlayers(long gameId) {
-        return playerRepository.findAllByGame_IdOrderById(gameId);
+    public Object getAllPlayers(long gameId) {
+        if (authentication.isAdmin())
+            return playerRepository.findAllByGame_IdOrderById(gameId);
+        else
+            return playerRepository.findAllByGame_IdOrderById(gameId, PlayerDetailsProjection.class);
     }
 
     //return a player by primary key in given game, if one exists
