@@ -130,7 +130,7 @@ public class PlayerService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No player id found in the game");
         }
 
-        Player toDelete = playerRepository.findByIdAndGame_Id(gameId, playerId);
+        Player toDelete = playerRepository.findByIdAndGame_Id(playerId, gameId);
         List<Kill> killList = toDelete.getKills();
         for (Kill kill: killList){
             Player victim = kill.getVictim();
