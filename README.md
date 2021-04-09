@@ -69,7 +69,7 @@ Open API details below to learn more about the endpoints. A Postman collection w
 ## About API
 
 
-Endpoints are secured by using Spring Security. Below is a list of supported methods. A more detailed documentation with response examples can be found in the postman collection, located in the root folder.
+Endpoints are secured by using Spring Security. Below is a list of supported methods. A more detailed documentation with response examples can be found in the postman collection [here](https://www.postman.com/collections/724ac63064ca47a5a6c8).
 
 If an endpoint that requires an token with 'admin' role is called without one either HTTP 403 is returned (if a token with 'user' role is sent) or HTTP 401 (if no token is supplied).
 
@@ -245,6 +245,12 @@ Returns global chat messages in the given game.
 Returns 404 if game id wasn't found.
 </details>
 
+<details>
+  <summary>Database Diagram</summary>
+  
+  ![db diagram](https://i.imgur.com/sjq0Iqm.png)
+  
+</details>
 
 ## Contributors of the project
 
