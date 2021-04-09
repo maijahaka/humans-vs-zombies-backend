@@ -45,7 +45,7 @@ public class Player {
     private Game game;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "player")
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
     private List<Message> messages;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "killer")
