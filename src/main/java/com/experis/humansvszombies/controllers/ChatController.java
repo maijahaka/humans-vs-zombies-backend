@@ -1,12 +1,8 @@
 package com.experis.humansvszombies.controllers;
 
-import com.experis.humansvszombies.models.Chat;
-import com.experis.humansvszombies.models.Game;
 import com.experis.humansvszombies.models.Message;
 import com.experis.humansvszombies.models.stomp.StompMessage;
 import com.experis.humansvszombies.models.stomp.StompMessageType;
-import com.experis.humansvszombies.repositories.GameRepository;
-import com.experis.humansvszombies.repositories.MessageRepository;
 import com.experis.humansvszombies.services.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "${ALLOWED_ORIGINS}")
 @RequestMapping("/api/v1/games/{id}/chat")
 public class ChatController {
 

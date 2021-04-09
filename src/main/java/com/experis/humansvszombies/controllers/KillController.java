@@ -2,7 +2,6 @@ package com.experis.humansvszombies.controllers;
 
 import com.experis.humansvszombies.models.Kill;
 import com.experis.humansvszombies.models.stomp.KillStompMessage;
-import com.experis.humansvszombies.models.stomp.StompMessage;
 import com.experis.humansvszombies.models.stomp.StompMessageType;
 import com.experis.humansvszombies.models.wrappers.BiteCodeKillerWrapper;
 import com.experis.humansvszombies.services.KillService;
@@ -16,7 +15,7 @@ import java.util.List;
 
 @RequestMapping("/api/v1/games/{gameId}/kills")
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "${ALLOWED_ORIGINS}")
 public class KillController {
     @Autowired
     private KillService killService;
