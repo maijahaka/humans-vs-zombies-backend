@@ -2,13 +2,15 @@
 
 Humans vs. Zombies (HvZ) is a game of tag played at schools, camps, neighborhoods, libraries, and conventions around the world. The game simulates the exponential spread of a fictional zombie infection through a population. This application creates the base for the games to playing in the real world.
 
-The frontend source code can be found at https://github.com/Satuhoo/humans-vs-zombies-frontend.
+The frontend source code and more details about the application can be found at https://github.com/Satuhoo/humans-vs-zombies-frontend.
 
 ## Contributors
 
 [Maija Haka](https://github.com/maijahaka), [Okko Partanen](https://github.com/okarp) and [Satu Heikkonen](https://github.com/Satuhoo)
 
 ## API endpoints
+
+Endpoints are secured by using Spring Security.
 
 ### Game
 -	Full CRUD 
@@ -30,6 +32,9 @@ The frontend source code can be found at https://github.com/Satuhoo/humans-vs-zo
 
 The postman collection can be found in the root folder.
 
+## Limitations
+
+The application does not contain rate limiting.
 
 ## Installation
 
