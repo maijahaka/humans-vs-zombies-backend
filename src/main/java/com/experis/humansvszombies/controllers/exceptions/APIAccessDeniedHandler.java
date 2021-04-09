@@ -16,7 +16,7 @@ public class APIAccessDeniedHandler implements AccessDeniedHandler {
         httpServletResponse.setContentType("application/json");
         httpServletResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
         ObjectMapper mapper = new ObjectMapper();
-        ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, "Only admins can perform this request.");
+        ApiError apiError = new ApiError(HttpStatus.FORBIDDEN, "Only admins can perform this request.");
         String jsonResult = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(apiError);
         httpServletResponse.getOutputStream().println(jsonResult);
     }

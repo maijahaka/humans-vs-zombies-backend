@@ -54,7 +54,7 @@ public class Message {
     @JsonGetter("player")
     public String player(){
         if (player != null)
-            return "/api/v1/players/" + player.getId();
+            return "/api/v1/games/" + player.getGame().getId() + "/players/" + player.getId();
         return null;
     }
 
