@@ -59,13 +59,12 @@ As fully configuring a Keycloak instance is beyond the scope of this readme, I r
 
 </details>
 
+## API
 
-## Contributors of the project
-
-[Maija Haka](https://github.com/maijahaka), [Okko Partanen](https://github.com/okarp) and [Satu Heikkonen](https://github.com/Satuhoo)
+Open API details below to learn more about the endpoints. A Postman collection with examples can also be found in the project root folder.
 
 <details>
-<summary>Open API documentation</summary>
+<summary>API documentation</summary>
   
 ## About API
 
@@ -245,6 +244,12 @@ GET: api/v1/games/{id}/global/
 Returns global chat messages in the given game.
 Returns 404 if game id wasn't found.
 </details>
+
+
+## Contributors of the project
+
+[Maija Haka](https://github.com/maijahaka), [Okko Partanen](https://github.com/okarp) and [Satu Heikkonen](https://github.com/Satuhoo)
+
 
 ## Limitations
 
