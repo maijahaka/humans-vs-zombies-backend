@@ -8,6 +8,29 @@ The frontend source code can be found at https://github.com/Satuhoo/humans-vs-zo
 
 [Maija Haka](https://github.com/maijahaka), [Okko Partanen](https://github.com/okarp) and [Satu Heikkonen](https://github.com/Satuhoo)
 
+## API endpoints
+
+### Game
+-	Full CRUD 
+-	GET statistics
+
+### Player
+-	Full CRUD 
+-	GET logged player
+
+### Kill
+-	POST kill
+-	GET all kills
+-	GET kill by id
+
+### Chat
+-	POST message
+-	GET all messages
+-	GET all global messages
+
+The postman collection can be found in the root folder.
+
+
 ## Installation
 
 See the **frontend** installation at https://github.com/Satuhoo/humans-vs-zombies-frontend
